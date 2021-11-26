@@ -1,0 +1,19 @@
+version: "3"
+services:
+  flaskapp:
+    container_name: status_flaskapp
+    build:
+      context: ./flaskapp
+      dockerfile: Dockerfile
+    volumes:
+      - ./flaskapp:/app
+    ports:
+      - "${FLASKAPP_PORT}:5000"
+  cron:
+    container_name: status_cron
+    restart: always
+    build:
+      context: cron
+      dockerfile: Dockerfile
+    volumes:
+      - ./cron/crontab.txt:/crontab.txt
