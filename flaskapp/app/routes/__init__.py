@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, abort
 import sys
 
-# setting path
+# Loading parent folder
 sys.path.append('../app')
 
 from app.services import lithocenter
