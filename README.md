@@ -1,5 +1,9 @@
+Dentro da pasta do projeto execute
+
 ```sh
-docker-compose up -d --build
+docker-compose build --no-cache
+docker-compose up -d
 # Rodando na porta 5005 por padrão, alterar em .env
-# use /check_services para testar o fluxo do frontend
+# use http://localhost:5005/service/lithocenter_frontend para testar o fluxo do frontend
+docker-compose logs -f
 ```

@@ -8,6 +8,8 @@ from sqlalchemy.sql import func
 import requests
 from bs4 import BeautifulSoup
 
+from app.routes import services_routes
+
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///sqlite3.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -40,3 +42,5 @@ class StatusRecord(db.Model):
 def index():    
     ''' Aqui eu devo capturar os status e imagens '''
     return render_template('status.html')
+
+app.register_blueprint(services_routes, url_prefix='/service')

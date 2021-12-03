@@ -18,8 +18,13 @@ def check_frontend():
     image_path = f'{ROOT_PATH}/image_records/{image_name}.png'
 
     driver.get(URL)
+    # Capture screenshot
     driver.get_screenshot_as_file(image_path)
+    # Compress screenshot image file
     convert_compress(image_path)
+    # Verify if a MUST HAVE element exists when loading frontend
+    find_element = driver.find_element(By.XPATH,
+                                       "//div[@class='phone']/a[@class='number']").is_displayed()
+    # TODO Add record to sqlite database
 
-    return driver.find_element(By.XPATH,
-                               "//div[@class='phone']/a[@class='number']").is_displayed()
+    return find_element
