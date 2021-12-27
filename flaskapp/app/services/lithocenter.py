@@ -5,7 +5,7 @@ from app.settings import ROOT_PATH
 from app.utils.images import convert_compress
 from app.utils.selenium import driver
 from app.services.db import db
-from app.Models.Status import StatusRecord
+from app.Models.StatusRecord import StatusRecord
 from app.Models.Service import Service
 
 from selenium.webdriver.common.by import By
