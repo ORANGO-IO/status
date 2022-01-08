@@ -9,4 +9,3 @@ class Service(db.Model):
     name = db.Column(db.String, unique=True, nullable=False)
     created_at = db.Column(db.DateTime(timezone=True),
                            server_default=func.now())
-    updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now())
