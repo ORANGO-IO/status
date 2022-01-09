@@ -6,3 +6,9 @@ class Status(db.Model):
 
     id= db.Column(db.Integer,primary_key=True)
     value=db.Column(db.String,unique=True, nullable=False)
+    
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+        return self
