@@ -30,14 +30,27 @@ def verifyFrontendStatus(url,xpath,serviceName):
     driver.get_screenshot_as_file(image_path)
     # Compress screenshot image file
     convert_compress(image_path)
-    print(image_path)
     # Verify if a MUST HAVE element exists when loading frontend
     # newImage = StatusImage(url=image_path,mime_type="teste")
     find_element = driver.find_element(By.XPATH,xpath).is_displayed()
     # TODO Add record to sqlite database
     print(find_element)
+    image = {
+        "url":image_path,
+        "mime_type":"images/png"
+        }
+    newImage = StatusImage(**image).save()
+    getstatus = Status.find_by_username('on')
+    getService = Service.find_by_username(serviceName)
+    print(getstatus.id)
+    StatusRecord(**{
+    'service_id':getService.id,
+    'status_id':getstatus.id,
+    'image_id': newImage.id,
+    }).save()
+# Output)
     # if(find_element)
-
+        
 
     # newStatus = Service(username="lucas",email="lucas@gmail.com")
     # newStatus = StatusRecord(username="lucas",email="lucas@gmail.com")
