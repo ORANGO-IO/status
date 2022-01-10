@@ -12,3 +12,8 @@ class Status(db.Model):
         db.session.commit()
 
         return self
+    
+    @classmethod
+    def find_by_username(cls, value):
+        return Status.query.filter(Status.value == value).first()
+    

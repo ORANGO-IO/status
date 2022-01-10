@@ -9,3 +9,8 @@ class StatusImage(db.Model):
     mime_type = db.Column(db.String,nullable=False)
     created_at = db.Column(db.DateTime(timezone=True),
                            server_default=func.now())
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+        return self
