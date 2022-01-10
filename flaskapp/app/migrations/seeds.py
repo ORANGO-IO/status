@@ -3,22 +3,33 @@
 # Example:
 from flask import current_app
 from app.Models.Status import Status
+from app.Models.Service import Service
 # from app.services.db import db
 app_config = current_app.config
 
 print("oioi")
-initial_user = [
+initialStatus = [
     {
-        "value":"b"
+        "value":"on"
     },
     {
-        "value":"a"
+        "value":"off"
     }
 ]
 
-for x in initial_user:
-    Status(**x).save()
+initialServices = [
+    {
+        "name":"LITHOCENTER"
+    }
+]
+
+for x in initialStatus:
+    if Status.find_by_username(x['value']) is None:
+        Status(**x).save()
+
+for x in initialServices:
+    if Service.find_by_username(x['name']) is None:
+        Service(**x).save()
+      
 # db.session.add(status)
 # db.session.commit()
-# if Status.find_by_username(initial_user['username']) is None:
-#     User().save()

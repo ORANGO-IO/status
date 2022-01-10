@@ -8,6 +8,7 @@ from app.services.db import create_app
 
 
 # There's no access to current_app here so we must create our own app.
+print("tstando")
 app = create_app()
 db_uri = app.config["SQLALCHEMY_DATABASE_URI"]
 db = app.extensions["sqlalchemy"].db
