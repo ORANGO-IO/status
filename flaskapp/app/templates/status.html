@@ -1,3 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hello HTML Templates</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
 <body>
-Empty test page from status.orango.io a flask microservice
+    <div>
+        <header>
+            <div>
+                <h1>Orango status</h1>
+            </div>
+        </header>
+        <main class="">
+            <div class="show_services">
+                <h2 class="on">54 serviços <strong>online</strong></h2>
+                <h2 class="off">3 serviços <strong>offline</strong></h2>
+            </div>
+            <div>
+                Empty test page from status.orango.io a flask microservice
+            </div>
+        </main>
+    </div>
 </body>
+</html>
