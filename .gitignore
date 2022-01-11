@@ -1,1 +1,4 @@
 __pycache__
+flaskapp/app/image_records/*.jpg
+*.css
+*.css.map
