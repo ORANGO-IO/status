@@ -1,11 +1,3 @@
-from datetime import datetime
-import os
-
-from app.settings import ROOT_PATH
-from app.utils.images import convert_compress
-from app.utils.selenium import driver
-
-from selenium.webdriver.common.by import By
 from app.services.verifyFrontendStatus import verifyFrontendStatus
 
 

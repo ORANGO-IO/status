@@ -1,8 +1,8 @@
 from app.services.db import db
 from sqlalchemy.sql import func
 
-class StatusImage(db.Model):
-    __tablename__ = 'status_images'
+class Screenshot(db.Model):
+    __tablename__ = 'screenshot'
 
     id = db.Column(db.Integer,primary_key=True)
     url = db.Column(db.String,nullable=False)

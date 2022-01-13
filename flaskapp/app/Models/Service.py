@@ -19,3 +19,7 @@ class Service(db.Model):
     @classmethod
     def find_by_name(cls, name):
         return Service.query.filter(Service.name == name).first()
+    
+    @classmethod
+    def find_by_id(cls,id):
+        return Service.query.get(id)

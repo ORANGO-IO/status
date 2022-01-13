@@ -6,8 +6,8 @@ from app.utils.images import convert_compress
 from app.utils.selenium import driver
 from app.services.db import db
 from app.Models.Service import Service
-from app.Models.StatusImage import StatusImage
-from app.Models.Status import Status
+from flaskapp.app.Models.Screenshot import Screenshot
+from flaskapp.app.Models.JopRecordStatus import JopRecordStatus
 from app.Models.StatusRecord import StatusRecord
 
 from selenium.webdriver.common.by import By
@@ -27,10 +27,10 @@ def verifyFrontendStatus(url,xpath,serviceName):
             "url":image_path,
             "mime_type":"images/png"
             }
-        newImage = StatusImage(**image).save()
+        newImage = Screenshot(**image).save()
         getService = Service.find_by_name(serviceName)
         if find_element == False:
-            getstatus = Status.find_by_name('off')
+            getstatus = JopRecordStatus.find_by_name('off')
             print(getstatus.id)
             StatusRecord(**{
             'service_id':getService.id,
@@ -39,7 +39,7 @@ def verifyFrontendStatus(url,xpath,serviceName):
             }).save()
             return
 
-        getstatus = Status.find_by_name('on')
+        getstatus = JopRecordStatus.find_by_name('on')
         print(getstatus.id)
         StatusRecord(**{
         'service_id':getService.id,
@@ -50,7 +50,7 @@ def verifyFrontendStatus(url,xpath,serviceName):
     except:
         print("getstatus.id")
         getService = Service.find_by_name(serviceName)
-        getstatus = Status.find_by_name('off')
+        getstatus = JopRecordStatus.find_by_name('off')
         StatusRecord(**{
         'service_id':getService.id,
         'status_id':getstatus.id,

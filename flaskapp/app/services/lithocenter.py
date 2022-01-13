@@ -1,20 +1,7 @@
-from datetime import datetime
-import os
-
-from app.settings import ROOT_PATH
-from app.utils.images import convert_compress
-# from app.utils.selenium import driver
-from app.services.db import db
-from app.Models.Service import Service
-from app.Models.StatusImage import StatusImage
-from app.Models.Status import Status
-from app.Models.StatusRecord import StatusRecord
-
-from selenium.webdriver.common.by import By
 from app.services.verifyFrontendStatus import verifyFrontendStatus
 
 
-SERVICE_NAME = "LITHOCENTER"
+# SERVICE_NAME = "LITHOCENTER"
 
 
 def check_frontend():

@@ -2,7 +2,7 @@
 #
 # Example:
 from flask import current_app
-from app.Models.Status import Status
+from flaskapp.app.Models.JopRecordStatus import JopRecordStatus
 from app.Models.Service import Service
 # from app.services.db import db
 app_config = current_app.config
@@ -27,8 +27,8 @@ initialServices = [
 ]
 
 for x in initialStatus:
-    if Status.find_by_name(x['value']) is None:
-        Status(**x).save()
+    if JopRecordStatus.find_by_name(x['value']) is None:
+        JopRecordStatus(**x).save()
 
 for x in initialServices:
     if Service.find_by_name(x['name']) is None:
