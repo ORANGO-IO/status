@@ -22,7 +22,7 @@ def check_frontend():
     verifyFrontendStatus(f'https://lithocenterhospitaldia.com',"//div[@class='phone']/a[@class='number']",'LITHOCENTER')
     print("passou")
     # SUBSERVICE_NAME = "FRONTEND"
-    # URL = 
+    # URL = "//div[@class='phone']/a[@class='number']"
     # image_name = f'{SERVICE_NAME}_{SUBSERVICE_NAME}_{datetime.now().strftime("%Y_%m_%d__%H_%M_%S")}'
     # image_path = f'{ROOT_PATH}/image_records/{image_name}.png'
 
