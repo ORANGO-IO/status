@@ -20,15 +20,18 @@ initialStatus = [
 initialServices = [
     {
         "name":"LITHOCENTER"
-    }
+    },
+    {
+        "name":"POSTBAKER"
+    },
 ]
 
 for x in initialStatus:
-    if Status.find_by_username(x['value']) is None:
+    if Status.find_by_name(x['value']) is None:
         Status(**x).save()
 
 for x in initialServices:
-    if Service.find_by_username(x['name']) is None:
+    if Service.find_by_name(x['name']) is None:
         Service(**x).save()
       
 # db.session.add(status)

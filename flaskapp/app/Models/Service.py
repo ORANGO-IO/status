@@ -17,5 +17,5 @@ class Service(db.Model):
         return self
         
     @classmethod
-    def find_by_username(cls, name):
+    def find_by_name(cls, name):
         return Service.query.filter(Service.name == name).first()

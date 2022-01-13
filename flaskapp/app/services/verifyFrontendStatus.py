@@ -28,9 +28,9 @@ def verifyFrontendStatus(url,xpath,serviceName):
             "mime_type":"images/png"
             }
         newImage = StatusImage(**image).save()
-        getService = Service.find_by_username(serviceName)
+        getService = Service.find_by_name(serviceName)
         if find_element == False:
-            getstatus = Status.find_by_username('off')
+            getstatus = Status.find_by_name('off')
             print(getstatus.id)
             StatusRecord(**{
             'service_id':getService.id,
@@ -39,7 +39,7 @@ def verifyFrontendStatus(url,xpath,serviceName):
             }).save()
             return
 
-        getstatus = Status.find_by_username('on')
+        getstatus = Status.find_by_name('on')
         print(getstatus.id)
         StatusRecord(**{
         'service_id':getService.id,
@@ -49,8 +49,8 @@ def verifyFrontendStatus(url,xpath,serviceName):
         return 
     except:
         print("getstatus.id")
-        getService = Service.find_by_username(serviceName)
-        getstatus = Status.find_by_username('off')
+        getService = Service.find_by_name(serviceName)
+        getstatus = Status.find_by_name('off')
         StatusRecord(**{
         'service_id':getService.id,
         'status_id':getstatus.id,

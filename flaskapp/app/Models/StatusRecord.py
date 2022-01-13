@@ -8,7 +8,7 @@ class StatusRecord(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     service_id = db.Column(db.Integer,db.ForeignKey('services.id'),nullable=False)
     status_id = db.Column(db.Integer,db.ForeignKey('status.id'),nullable=False)
-    image_id = db.Column(db.Integer,db.ForeignKey('status_images.id'),nullable=False)
+    image_id = db.Column(db.Integer,db.ForeignKey('status_images.id'),nullable=True)
     created_at = db.Column(db.DateTime(timezone=True),
                            server_default=func.now())
     def save(self):

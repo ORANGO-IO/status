@@ -14,6 +14,6 @@ class Status(db.Model):
         return self
     
     @classmethod
-    def find_by_username(cls, value):
+    def find_by_name(cls, value):
         return Status.query.filter(Status.value == value).first()
     
