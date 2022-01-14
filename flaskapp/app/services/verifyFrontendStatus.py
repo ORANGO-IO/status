@@ -8,7 +8,7 @@ from app.services.db import db
 from app.Models.Service import Service
 from flaskapp.app.Models.Screenshot import Screenshot
 from flaskapp.app.Models.JopRecordStatus import JopRecordStatus
-from app.Models.StatusRecord import StatusRecord
+from flaskapp.app.Models.JobRecord import JobRecord
 
 from selenium.webdriver.common.by import By
 
@@ -32,7 +32,7 @@ def verifyFrontendStatus(url,xpath,serviceName):
         if find_element == False:
             getstatus = JopRecordStatus.find_by_name('off')
             print(getstatus.id)
-            StatusRecord(**{
+            JobRecord(**{
             'service_id':getService.id,
             'status_id':getstatus.id,
             'image_id': newImage.id,
@@ -41,7 +41,7 @@ def verifyFrontendStatus(url,xpath,serviceName):
 
         getstatus = JopRecordStatus.find_by_name('on')
         print(getstatus.id)
-        StatusRecord(**{
+        JobRecord(**{
         'service_id':getService.id,
         'status_id':getstatus.id,
         'image_id': newImage.id,
@@ -51,7 +51,7 @@ def verifyFrontendStatus(url,xpath,serviceName):
         print("getstatus.id")
         getService = Service.find_by_name(serviceName)
         getstatus = JopRecordStatus.find_by_name('off')
-        StatusRecord(**{
+        JobRecord(**{
         'service_id':getService.id,
         'status_id':getstatus.id,
         }).save()
@@ -59,7 +59,7 @@ def verifyFrontendStatus(url,xpath,serviceName):
 
         # getstatus = Status.find_by_username('on')
         # print(getstatus.id)
-        # StatusRecord(**{
+        # JobRecord(**{
         # 'service_id':getService.id,
         # 'status_id':getstatus.id,
         # 'image_id': newImage.id,

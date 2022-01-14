@@ -7,8 +7,9 @@ class Screenshot(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     url = db.Column(db.String,nullable=False)
     mime_type = db.Column(db.String,nullable=False)
+    job_record_id = db.Column(db.Integer,db.ForeignKey('job_record_status.id'),nullable=True),
     created_at = db.Column(db.DateTime(timezone=True),
-                           server_default=func.now())
+                           server_default=func.now()),
     def save(self):
         db.session.add(self)
         db.session.commit()
