@@ -2,7 +2,7 @@
 #
 # Example:
 from flask import current_app
-from flaskapp.app.Models.JopRecordStatus import JopRecordStatus
+from app.Models.JopRecordStatus import JopRecordStatus
 from app.Models.Service import Service
 # from app.services.db import db
 app_config = current_app.config

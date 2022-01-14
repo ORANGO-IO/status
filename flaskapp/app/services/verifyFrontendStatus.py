@@ -6,9 +6,9 @@ from app.utils.images import convert_compress
 from app.utils.selenium import driver
 from app.services.db import db
 from app.Models.Service import Service
-from flaskapp.app.Models.Screenshot import Screenshot
-from flaskapp.app.Models.JopRecordStatus import JopRecordStatus
-from flaskapp.app.Models.JobRecord import JobRecord
+from app.Models.Screenshot import Screenshot
+from app.Models.JopRecordStatus import JopRecordStatus
+from app.Models.JobRecord import JobRecord
 
 from selenium.webdriver.common.by import By
 
