@@ -1,6 +1,7 @@
 from flask import Blueprint, request
 import sys
-
+from flask_expects_json import expects_json
+from app.validations.serviceSchema import serviceSchema
 from app.Controllers.serviceController import ServiceController
 
 # Loading parent folder
@@ -21,7 +22,8 @@ def service_lithocenter_frontend():
 def service_postbaker_frontend():    
     postbaker.check_frontend()
     return 'Hello, this is status.orango.io a flask microservice'
-@services_routes.route('/service',methods = ['POST'])
+@services_routes.route('/',methods = ['POST'])
+@expects_json(serviceSchema)
 def createService():
     req = request.get_json()
     return serviceController.create(req.get('name'))
