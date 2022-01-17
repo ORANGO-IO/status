@@ -1,16 +1,17 @@
-from flask import Blueprint, request
+from flask import Blueprint, request,Response
 import sys
 from flask_expects_json import expects_json
 from app.validations.serviceSchema import serviceSchema
 from app.validations.jobSchema import jobSchema
 from app.Controllers.serviceController import ServiceController
 from app.Controllers.job import JobController
+from app.Controllers.job_record import Job_record_controller
 
 # Loading parent folder
 sys.path.append('../app')
 
 from app.services import lithocenter,postbaker
-
+job_record_controller = Job_record_controller()
 serviceController = ServiceController()
 jobController = JobController()
 services_routes = Blueprint('services_routes', __name__,
@@ -37,3 +38,9 @@ def createJob():
 def createService():
     req = request.get_json()
     return serviceController.create(req.get('name'))
+
+@services_routes.route('/verify_service/<job_id>',methods=['POST'])
+def create_job_record(job_id = None):
+    if type(job_id) == int:
+        return job_record_controller.create(job_id)
+    return Response('{"error":"job_id not is integer"}', status=404, mimetype='application/json')
