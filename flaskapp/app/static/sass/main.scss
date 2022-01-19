@@ -5,6 +5,15 @@
   box-sizing: border-box;
   font-family: 'Roboto', sans-serif;
 }
+html,body{
+  height:100%
+}
+
+body > div{
+  height:100%;
+  display:flex;
+  flex-direction: column;
+}
 
 header {
   background: linear-gradient(90.02deg, #0b8aff 0.03%, #9507d8 105.11%);
@@ -34,20 +43,39 @@ header {
 }
 
 main {
+  flex:1;
+  background: #F8F8F8;
   display: flex;
   align-items: center;
   justify-content: center;
   padding-top: 38px;
   flex-direction: column;
 
+  .footer{
+    display:flex;
+    align-items: center;
+    justify-content: flex-end;
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 13px;
+    line-height: 15px;
+
+    color: #A9A9A9;
+    p{
+      margin-left: 8px;
+    }
+  }
+
   div {
     max-width: 900px;
-    width: 100%;
+    width: -webkit-fill-available;
   }
 
   .aplication{
     margin-bottom:32px;
     margin-left: 32px;
+    flex:1;
 
     h2{
       font-family: Roboto;

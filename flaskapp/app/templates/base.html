@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hello HTML Templates</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/main.css') }}"
+    />
+  </head>
+  <body>
+    <div>
+      <header>
+        <div>
+            <img src="{{ url_for('static', filename='assets/logo.png') }}"/>
+          <h1>status</h1>
+        </div>
+      </header>
+      <main class="">
+        <div class="show_services">
+          {% block show_service %}{% endblock %}
+        </div>
+        <div class="aplication">
+          {% block content %}{% endblock %}
+        </div>
+        <div class="footer">
+          <img src="{{ url_for('static', filename='assets/logo_secondary.png') }}"/><p>© 2021</p>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
