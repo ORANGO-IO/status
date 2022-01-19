@@ -16,10 +16,14 @@ class Job_record_controller:
     def create(self,job_id):
         print('job_record')
         initialTime = 0
+        job = ''
         try:
             job = Job.find_by_id(job_id)
             if job is None:
                 return Response('{"error":"job not exist"}', status=404, mimetype='application/json')
+        except:
+             return Response('{"error":"server error in job"}', status=404, mimetype='application/json')
+        try:
             image_name = f'{job.service.name}_SUBSERVICE_NAME_{datetime.now().strftime("%Y_%m_%d__%H_%M_%S")}'
             image_path = f"{ROOT_PATH}/image_records/{image_name}.png"
             initialTime =  time.time()
@@ -59,7 +63,7 @@ class Job_record_controller:
                 'status_id':getstatus.id,
                 'time_spent_in_sec': finishedTime -initialTime,
                 }).save()
-            return Response('{"error":"server error"}', status=500, mimetype='application/json')
+            return Response('{"error":"job {job.service.name} offline"}', status=500, mimetype='application/json')
 
 
 

@@ -43,6 +43,6 @@ def createService():
 
 @services_routes.route('/verify_service/<job_id>',methods=['POST'])
 def create_job_record(job_id = None):
-    if type(job_id) == int:
+    if type(int(job_id)) == int:
         return job_record_controller.create(job_id)
     return Response('{"error":"job_id not is integer"}', status=404, mimetype='application/json')
