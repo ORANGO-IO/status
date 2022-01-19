@@ -12,5 +12,8 @@ def index():
     print("testesds")
     ''' Aqui eu devo capturar os status e imagens '''
     return render_template('status.html')
+@app.route('/details')
+def details():
+    return render_template('details.html')
 
 app.register_blueprint(services_routes, url_prefix='/service')

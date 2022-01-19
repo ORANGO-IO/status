@@ -84,7 +84,9 @@ main {
       font-size: 30px;
       line-height: 35px;
       color: #565656;
+      
     }
+
     div{
 
       margin-top: 18px;
@@ -186,6 +188,16 @@ main {
     h2 {
       margin-right: 13px;
       font-size: 30px;
+
+      &.detail_title{
+        color: #646464;
+        font-weight: normal;
+      }
+  
+      &.secondary{
+        color: #A9A9A9;
+        font-weight: normal;
+      }
     }
 
     .on {
