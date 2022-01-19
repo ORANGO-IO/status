@@ -26,3 +26,20 @@ class JobController:
             )
         except: 
             return Response('{"error":"server error"}', status=500, mimetype='application/json')
+    def all(self):
+        try:
+            jobs = Job.query.order_by(Job.order).all()
+            jobsArray = []
+            for job in jobs:
+                jobsArray.append({
+                "id":job.id,
+                "order":job.order,
+                "url":job.url,
+                "action":job.action,
+                "action_value":job.action_value,
+                "service_id":job.service_id,
+                "created_at":job.created_at
+                })
+            return jsonify(jobsArray)
+        except:
+            return Response('{"error":"server error"}', status=500, mimetype='application/json')

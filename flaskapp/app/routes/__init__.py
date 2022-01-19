@@ -27,11 +27,13 @@ def service_postbaker_frontend():
     postbaker.check_frontend()
     return 'Hello, this is status.orango.io a flask microservice'
 
-@services_routes.route('/job',methods=['POST'])
-@expects_json(jobSchema)
-def createJob():
-    req = request.get_json()
-    return jobController.create(req.get('order'),req.get('url'),req.get('action'),req.get('actionValue'),req.get('serviceId'))
+@services_routes.route('/job',methods=['POST','GET'])
+@expects_json(jobSchema, ignore_for=['GET'])
+def job():
+    if request.method == 'POST':
+        req = request.get_json()
+        return jobController.create(req.get('order'),req.get('url'),req.get('action'),req.get('actionValue'),req.get('serviceId'))
+    return jobController.all()
 
 @services_routes.route('/',methods = ['POST'])
 @expects_json(serviceSchema)

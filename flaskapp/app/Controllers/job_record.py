@@ -15,7 +15,7 @@ from selenium.webdriver.common.by import By
 class Job_record_controller:
     def create(self,job_id):
         print('job_record')
-
+        initialTime = 0
         try:
             job = Job.find_by_id(job_id)
             if job is None:
@@ -52,13 +52,13 @@ class Job_record_controller:
                 createdAt=job_record.created_at
             )
         except:
-            # print("getstatus.id")
-            # getService = Service.find_by_name(serviceName)
-            # getstatus = JopRecordStatus.find_by_name('offline')
-            # JobRecord(**{
-            # 'service_id':getService.id,
-            # 'status_id':getstatus.id,
-            # }).save()
+            finishedTime = time.time()
+            getstatus = JopRecordStatus.find_by_name('offline')
+            JobRecord(**{
+                'job_id':job.id,
+                'status_id':getstatus.id,
+                'time_spent_in_sec': finishedTime -initialTime,
+                }).save()
             return Response('{"error":"server error"}', status=500, mimetype='application/json')
 
 
