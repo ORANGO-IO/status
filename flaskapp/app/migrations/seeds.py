@@ -35,8 +35,8 @@ job = {
 	"order":1,
 	"url":"http://lithocenterhospitaldia.com/",
 	"action":"XPATH",
-	"actionValue":"//div[@class='phone']/a[@class='number']",
-	"serviceId":1
+	"action_value":"//div[@class='phone']/a[@class='number']",
+	"service_id":1
 }
 
 jobRecord={
