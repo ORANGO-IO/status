@@ -4,8 +4,7 @@ jobSchema = {
         'order': {'type': 'integer'},
         'url':{'type':'string'},
         'action':{
-            'type':'string',
-            "enum": ["XPATH", "FUNCTION"]
+            'type':'string'
         },
         'actionValue':{'type':'string'},
         'serviceId':{'type':'integer'}
