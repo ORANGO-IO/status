@@ -13,36 +13,36 @@ app_config = current_app.config
 print("run seeds")
 initialStatus = [
     {
-        "value":"online",
-        "description":"online"
+        "value": "online",
+        "description": "online"
     },
     {
-        "value":"offline",
-        "description":"offline"
+        "value": "offline",
+        "description": "offline"
     }
 ]
 
 service_group = {
-    "name":"Lithocenter"
+    "name": "lithocenter"
 }
 
 service = {
-    "name":"teste",
-    "service_group_id":1
+    "name": "teste",
+    "service_group_id": 1
 }
 
 job = {
-	"order":1,
-	"url":"http://lithocenterhospitaldia.com/",
-	"action":"XPATH",
-	"action_value":"//div[@class='phone']/a[@class='number']",
-	"service_id":1
+    "order": 1,
+    "url": "http://lithocenterhospitaldia.com/",
+    "action": "XPATH",
+    "action_value": "//div[@class='phone']/a[@class='number']",
+    "service_id": 1
 }
 
-jobRecord={
-    "job_id":1,
-    "status_id":1,
-    "time_spent_in_sec":321312,
+jobRecord = {
+    "job_id": 1,
+    "status_id": 1,
+    "time_spent_in_sec": 321312
 }
 
 for x in initialStatus:
