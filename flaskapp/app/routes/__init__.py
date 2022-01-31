@@ -6,6 +6,7 @@ from app.validations.jobSchema import jobSchema
 from app.Controllers.serviceController import ServiceController
 from app.Controllers.job import JobController
 from app.Controllers.job_record import Job_record_controller
+from app.Controllers.service_group import Service_Group_Controller
 
 # Loading parent folder
 sys.path.append('../app')
@@ -14,6 +15,7 @@ from app.services import lithocenter,postbaker
 job_record_controller = Job_record_controller()
 serviceController = ServiceController()
 jobController = JobController()
+service_group_controller = Service_Group_Controller()
 services_routes = Blueprint('services_routes', __name__,
                         template_folder='templates',)
 
@@ -39,10 +41,17 @@ def job():
 @expects_json(serviceSchema)
 def createService():
     req = request.get_json()
-    return serviceController.create(req.get('name'))
+    return serviceController.create(req.get('name'),req.get('service_group_id'))
 
 @services_routes.route('/verify_service/<job_id>',methods=['POST'])
 def create_job_record(job_id = None):
     if type(int(job_id)) == int:
         return job_record_controller.create(job_id)
     return Response('{"error":"job_id not is integer"}', status=404, mimetype='application/json')
+@services_routes.route('/job_record')
+def get_job_record():
+    return job_record_controller.all()
+@services_routes.route('/service_group',methods = ['POST'])
+def service_group():
+    req = request.get_json()
+    return service_group_controller.create(req.get('name'))
