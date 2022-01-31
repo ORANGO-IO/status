@@ -25,3 +25,5 @@ class Job(db.Model):
     @classmethod
     def find_by_id(cls,id):
         return Job.query.get(id)
+
+    
