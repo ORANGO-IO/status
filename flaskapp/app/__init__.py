@@ -3,10 +3,6 @@ from flask import render_template
 from app.routes import services_routes
 from app.services.db import app,db
 
-# !Temporário
-db.create_all()
-# app = create_app()
-
 @app.route('/')
 def index():    
     print("testesds")
