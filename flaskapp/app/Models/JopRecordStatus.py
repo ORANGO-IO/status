@@ -6,7 +6,7 @@ class JopRecordStatus(db.Model):
 
     id= db.Column(db.Integer,primary_key=True)
     value=db.Column(db.String,unique=True, nullable=False)
-    description=db.Column(db.String,unique=True, nullable=False)
+    description=db.Column(db.String, nullable=False)
     
     def save(self):
         db.session.add(self)
