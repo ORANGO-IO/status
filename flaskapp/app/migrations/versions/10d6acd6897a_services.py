@@ -16,7 +16,8 @@ branch_labels = None
 depends_on = None
 
 
-def upgrade(): op.create_table(
+def upgrade(): 
+    op.create_table(
     'services',
     sa.Column('id', sa.Integer(),unique=True),
     sa.Column('name', sa.String(), nullable=False,unique=True),
