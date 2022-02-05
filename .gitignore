@@ -2,3 +2,5 @@ __pycache__
 flaskapp/app/image_records/*
 *.css
 *.css.map
+sqlite3.db
+geckodriver.log
