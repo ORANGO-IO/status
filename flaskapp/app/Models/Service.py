@@ -11,7 +11,7 @@ class Service(db.Model):
     created_at = db.Column(db.DateTime(timezone=True),
                            server_default=func.now())
     service_group = db.relationship('Service_group',
-        backref=db.backref('job', lazy=True))
+        backref=db.backref('jobs', lazy=True))
 
     def save(self):
         db.session.add(self)

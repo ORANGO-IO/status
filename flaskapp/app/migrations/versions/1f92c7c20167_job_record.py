@@ -31,4 +31,4 @@ def upgrade():
 
 
 def downgrade():
-    op.drop_table("job_record")
+    op.drop_table("job_records")

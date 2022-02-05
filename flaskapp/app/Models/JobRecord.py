@@ -3,7 +3,7 @@ from app.services.db import db
 from sqlalchemy.sql import func
 
 class JobRecord(db.Model):
-    __tablename__ = 'job_record'
+    __tablename__ = 'job_records'
 
     id = db.Column(db.Integer, primary_key=True)
     job_id = db.Column(db.Integer,db.ForeignKey('jobs.id'),nullable=False)
