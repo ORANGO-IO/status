@@ -23,7 +23,7 @@ def upgrade():
     sa.Column('job_id', sa.Integer(), nullable=False),
     sa.Column('status_id', sa.Integer(), nullable=False),
     sa.Column('time_spent_in_sec', sa.Integer(), nullable=False),
-    sa.Column('created_at', sa.DateTime()),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.func.current_timestamp()),
     sa.PrimaryKeyConstraint('id'),
     sa.ForeignKeyConstraint(['job_id'], ['jobs.id'], ondelete='cascade'),
     sa.ForeignKeyConstraint(['status_id'], ['job_record_status.id'], ondelete='cascade'),
