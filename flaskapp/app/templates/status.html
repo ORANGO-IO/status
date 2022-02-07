@@ -1,12 +1,31 @@
 {% extends 'base.html' %}
 
 {% block show_service %}
-  <h2 class="on">54 serviços <strong>online</strong></h2>
-  <h2 class="off">3 serviços <strong>offline</strong></h2>
+  <h2 class="on">{{json.count_online}} serviços <strong>online</strong></h2>
+  <h2 class="off">{{json.count_offline}} serviços <strong>offline</strong></h2>
 {% endblock %}
 
 {% block content %}
-  <h2>Aplicação 1</h2>
+{% for i in json.jobs_record_array %}
+  <h2>{{i.service_group}}</h2>
+  <h3>Serviços</h3>
+  <div>
+    {% for j in i.services %}
+      <ul>
+        <li>
+          <a>
+            <span class={{j.status}}></span>
+            <p>{{j.name}}</p>
+            <!-- <em>Última atualização 02 de Dezembro de 2021 04:56</em> -->
+            <em>{{j.date_time_format}}</em>
+            <p class="detail">Clique para mais detalhes</p>
+        </a>
+        </li>
+      </ul>
+    {%endfor%}
+  </div>
+{%endfor%}
+  <!-- <h2>Aplicação 1</h2>
   <div>
     <h3>Serviços</h3>
     <ul>
@@ -38,5 +57,5 @@
           </a>
       </li>
     </ul>
-  </div>
+  </div> -->
 {% endblock %}

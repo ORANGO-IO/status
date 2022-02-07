@@ -142,7 +142,7 @@ main {
             align-items: center;
             justify-content: center;
 
-            &.on{
+            &.online{
               background:linear-gradient(0deg, #3BA221, #3BA221), #3BA221;
 
               ::before{
@@ -151,7 +151,7 @@ main {
            
               }}
 
-            &.off{
+            &.offline{
 
               background: linear-gradient(0deg, #D22020, #D22020), #D22020;
 
