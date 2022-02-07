@@ -23,7 +23,7 @@ def upgrade():
         sa.Column('url', sa.String(), nullable=False),
         sa.Column('mime_type', sa.String(), nullable=False),
         sa.Column('job_record_id', sa.Integer(), nullable=False),
-        sa.Column('created_at', sa.DateTime()),
+        sa.Column('created_at', sa.DateTime(), server_default=sa.func.current_timestamp()),
         sa.PrimaryKeyConstraint('id'),
         sa.ForeignKeyConstraint(['job_record_id'], ['job_records.id'], ondelete='cascade'),
      )

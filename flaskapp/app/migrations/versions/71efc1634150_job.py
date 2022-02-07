@@ -25,7 +25,7 @@ def upgrade():
     sa.Column('action', sa.String(), nullable=False),
     sa.Column('action_value', sa.String(), nullable=True),
     sa.Column('service_id', sa.Integer(), nullable=False),
-    sa.Column('created_at', sa.DateTime()),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.func.current_timestamp()),
     sa.PrimaryKeyConstraint('id'),
     sa.ForeignKeyConstraint(['service_id'], ['services.id'], ondelete='cascade'),
      )

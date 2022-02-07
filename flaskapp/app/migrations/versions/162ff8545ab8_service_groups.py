@@ -22,7 +22,7 @@ def upgrade():
     'service_groups',
     sa.Column('id', sa.Integer(),unique=True),
     sa.Column('name', sa.String(), nullable=False,unique=True),
-    sa.Column('created_at', sa.DateTime()),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.func.current_timestamp()),
     sa.PrimaryKeyConstraint('id')
     )
 
