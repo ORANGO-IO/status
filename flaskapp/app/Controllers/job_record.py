@@ -16,141 +16,6 @@ from selenium.webdriver.common.by import By
 
 class Job_record_controller:
     
-
-    def __format_jobs_record(self,jobs_records):
-        jobs_record_array = []
-        count_online = 0
-        count_offline = 0
-        for job_record in jobs_records:
-            if jobs_record_array.__len__() == 0:
-                date_time_format = job_record.created_at.strftime('Última atualização %d de %B de %Y %H:%M')
-                if job_record.status.value == 'online':
-                    count_online += 1
-                else:
-                    count_offline +=1
-                jobs_record_array.append(dict(**{
-                    "service_group": job_record.job.service.service_group.name,
-                    "services": [
-                        {
-                            "id": job_record.job.service.id,
-                            "name": job_record.job.service.name,
-                            "status":job_record.status.value,
-                            "last_updated":job_record.created_at,
-                            "date_time_format":date_time_format,
-                            "jobs": [
-                                {
-                                    'id': job_record.id,
-                                    'status': job_record.status.value,
-                                    'time_spent_in_sec': job_record.time_spent_in_sec,
-                                    'job': {
-                                        "id": job_record.job.id,
-                                        "order": job_record.job.order,
-                                        "url": job_record.job.url,
-                                        "action": job_record.job.action,
-                                        "action_value": job_record.job.action_value,
-                                    }
-                                }
-                            ]
-
-                        }
-                    ]
-
-                }))
-                break
-            for index, x in enumerate(jobs_record_array):
-                print("x")
-                print(x)
-                if x["service_group"] == job_record.job.service.service_group.name:
-                    exist_service = False
-                    for y in x["services"]:
-                        if y['name'] == job_record.job.service.name:
-                            if(job_record.created_at > y['last_updated']):
-                                date_time_format = job_record.created_at.strftime('Última atualização %d de %B de %Y %H:%M')
-                                y['last_updated'] = job_record.created_at
-                                if y['status'] == 'online' & job_record.status.value == 'offline':
-                                    count_online -=1
-                                    count_offline+=1
-                                if y['status'] == 'offline' & job_record.status.value == 'online':
-                                    count_online +=1
-                                    count_offline -=1
-                                y['status'] = job_record.status.value
-                                y['date_time_format'] = date_time_format
-                            
-                            y['jobs'].append(
-                                {
-                                    'id': job_record.id,
-                                    'status': job_record.status.value,
-                                    'time_spent_in_sec': job_record.time_spent_in_sec,
-                                    'job': {
-                                        "id": job_record.job.id,
-                                        "order": job_record.job.order,
-                                        "url": job_record.job.url,
-                                        "action": job_record.job.action,
-                                        "action_value": job_record.job.action_value,
-                                    }
-                                }
-                            )
-                            exist_service = True
-                    if not exist_service:
-                        if job_record.status.value == 'online':
-                            count_online += 1
-                        else:
-                            count_offline +=1
-                        date_time_format = job_record.created_at.strftime('Última atualização %d de %B de %Y %H:%M')
-                        x['services'].append({
-                            "id": job_record.job.service.id,
-                            "name": job_record.job.service.name,
-                            "status":job_record.status.value,
-                            "last_updated":job_record.created_at,
-                            "date_time_format":date_time_format,
-                            "jobs": [
-                                {
-                                    'id': job_record.id,
-                                    'status': job_record.status.value,
-                                    'time_spent_in_sec': job_record.time_spent_in_sec,
-                                    'job': {
-                                        "id": job_record.job.id,
-                                        "order": job_record.job.order,
-                                        "url": job_record.job.url,
-                                        "action": job_record.job.action,
-                                        "action_value": job_record.job.action_value,
-                                    }
-                                }
-                            ]
-                        })
-                    break
-                if index + 1 == jobs_record_array.__len__():
-                    if job_record.status.value == 'online':
-                        count_online += 1
-                    else:
-                        count_offline +=1
-                    jobs_record_array.append({
-                        "service_group": job_record.job.service.service_group.name,
-                        "services":
-                        [
-                            {
-                                "id": job_record.job.service.id,
-                                "name": job_record.job.service.name,
-                                "status":job_record.status.value,
-                                "last_updated":job_record.created_at,
-                                "jobs": [
-                                    {
-                                        'id': job_record.id,
-                                        'status': job_record.status.value,
-                                        'time_spent_in_sec': job_record.time_spent_in_sec,
-                                        'job': {
-                                            "id": job_record.job.id,
-                                            "order": job_record.job.order,
-                                            "url": job_record.job.url,
-                                            "action": job_record.job.action,
-                                            "action_value": job_record.job.action_value,
-                                        }
-                                    }
-                                ]
-                            }
-                        ]
-                    })
-        return {"jobs_record_array":jobs_record_array,"count_online":count_online,"count_offline":count_offline}
     def create(self, job_id):
         print('job_record')
         initialTime = 0
@@ -235,7 +100,140 @@ class Job_record_controller:
     def all(self):
         print("==================== CAPTURANDO TODOS OS JOB RECORDS ====================")
         jobs_records = JobRecord.query.order_by(JobRecord.id).all()
-        jobs_record_array =self.__format_jobs_record(jobs_records)
+        jobs_record_array =[]
+        
+        count_online = 0
+        count_offline = 0
+        for job_record in jobs_records:
+            if jobs_record_array.__len__() == 0:
+                date_time_format = job_record.created_at.strftime('Última atualização %d de %B de %Y %H:%M')
+                if job_record.status.value == 'online':
+                    count_online += 1
+                else:
+                    count_offline +=1
+                jobs_record_array.append({
+                    "service_group": job_record.job.service.service_group.name,
+                    "services": [
+                        {
+                            "id": job_record.job.service.id,
+                            "name": job_record.job.service.name,
+                            "status":job_record.status.value,
+                            "last_updated":job_record.created_at,
+                            "date_time_format":date_time_format,
+                            "jobs": [
+                                {
+                                    'id': job_record.id,
+                                    'status': job_record.status.value,
+                                    'time_spent_in_sec': job_record.time_spent_in_sec,
+                                    'job': {
+                                        "id": job_record.job.id,
+                                        "order": job_record.job.order,
+                                        "url": job_record.job.url,
+                                        "action": job_record.job.action,
+                                        "action_value": job_record.job.action_value,
+                                    }
+                                }
+                            ]
+
+                        }
+                    ]
+
+                })
+
+            else:
+                for index, x in enumerate(jobs_record_array):
+                    if job_record.job.service.service_group.name == x["service_group"]:
+                        exist_service = False
+                        for y in x["services"]:
+                            if y['name'] == job_record.job.service.name:
+                                if(job_record.created_at > y['last_updated']):
+                                    date_time_format = job_record.created_at.strftime('Última atualização %d de %B de %Y %H:%M')
+                                    y['last_updated'] = job_record.created_at
+                                    if y['status'] == 'online' & job_record.status.value == 'offline':
+                                        count_online -=1
+                                        count_offline+=1
+                                    if y['status'] == 'offline' & job_record.status.value == 'online':
+                                        count_online +=1
+                                        count_offline -=1
+                                    y['status'] = job_record.status.value
+                                    y['date_time_format'] = date_time_format
+                                
+                                y['jobs'].append(
+                                    {
+                                        'id': job_record.id,
+                                        'status': job_record.status.value,
+                                        'time_spent_in_sec': job_record.time_spent_in_sec,
+                                        'job': {
+                                            "id": job_record.job.id,
+                                            "order": job_record.job.order,
+                                            "url": job_record.job.url,
+                                            "action": job_record.job.action,
+                                            "action_value": job_record.job.action_value,
+                                        }
+                                    }
+                                )
+                                exist_service = True
+                        if not exist_service:
+                            if job_record.status.value == 'online':
+                                count_online += 1
+                            else:
+                                count_offline +=1
+                            date_time_format = job_record.created_at.strftime('Última atualização %d de %B de %Y %H:%M')
+                            x['services'].append({
+                                "id": job_record.job.service.id,
+                                "name": job_record.job.service.name,
+                                "status":job_record.status.value,
+                                "last_updated":job_record.created_at,
+                                "date_time_format":date_time_format,
+                                "jobs": [
+                                    {
+                                        'id': job_record.id,
+                                        'status': job_record.status.value,
+                                        'time_spent_in_sec': job_record.time_spent_in_sec,
+                                        'job': {
+                                            "id": job_record.job.id,
+                                            "order": job_record.job.order,
+                                            "url": job_record.job.url,
+                                            "action": job_record.job.action,
+                                            "action_value": job_record.job.action_value,
+                                        }
+                                    }
+                                ]
+                            })
+                    if index + 1 == jobs_record_array.__len__():
+                        if job_record.status.value == 'online':
+                            count_online += 1
+                        else:
+                            count_offline +=1
+                        jobs_record_array.append({
+                            "service_group": job_record.job.service.service_group.name,
+                            "services":
+                            [
+                                {
+                                    "id": job_record.job.service.id,
+                                    "name": job_record.job.service.name,
+                                    "status":job_record.status.value,
+                                    "last_updated":job_record.created_at,
+                                    "jobs": [
+                                        {
+                                            'id': job_record.id,
+                                            'status': job_record.status.value,
+                                            'time_spent_in_sec': job_record.time_spent_in_sec,
+                                            'job': {
+                                                "id": job_record.job.id,
+                                                "order": job_record.job.order,
+                                                "url": job_record.job.url,
+                                                "action": job_record.job.action,
+                                                "action_value": job_record.job.action_value,
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        })
+            
+        
         
         print("==================== CAPTURANDO TODOS OS JOB RECORDS - END ====================")
-        return jobs_record_array
+        return {"jobs_record_array":jobs_record_array,"count_online":count_online,"count_offline":count_offline}
+        # return jobs_record_array
