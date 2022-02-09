@@ -162,21 +162,24 @@ job = [{
     "url": "https://orango.io/",
     "action": "XPATH",
     "action_value": "//div[@class='header']/img[@alt='logo']",
-    "service_id": 1
+    "service_id": 1,
+    'description':"descrição"
 },
 {
-    "order": 1,
+    "order": 2,
     "url": "https://strapi.orango.io/",
     "action": "XPATH",
-    "action_value": "//section[@class='wrapper']/h1/img[@alt='logo']",
-    "service_id": 5
+    "action_value": "//section[@class='wrapper']/h1/img[@class='logo']",
+    "service_id": 5,
+    'description':"descrição"
 },
 {
-    "order": 1,
+    "order": 3,
     "url": "https://strapi.orango.io/admin/auth/login",
     "action": "XPATH",
-    "action_value": "//section/img[@alt='strapi-logo']",
-    "service_id": 5
+    "action_value": "//*[@id='app']/div/div",
+    "service_id": 5,
+    'description':"descrição"
 },
 {
     "order": 1,
@@ -184,20 +187,23 @@ job = [{
     "action": "XPATH",
     "action_value": "//div[@id='intro-logo']/img",
     "service_id": 10,
+    'description':"descrição"
 },
 {
-    "order": 1,
+    "order": 2,
     "url": "https://itmpr.com.br",
     "action": "XPATH",
     "action_value": "//header[@id='mainheader']/img[@id='mainlogo']",
     "service_id": 9,
+    'description':"descrição"
 },
 {
-    "order": 1,
+    "order": 2,
     "url": "https://teleatendimento.orango.io/login",
     "action": "XPATH",
     "action_value": "//header/img[@alt='lines']",
     "service_id": 11,
+    'description':"descrição"
 },
 {
     "order": 1,
@@ -205,6 +211,7 @@ job = [{
     "action": "status",
     "action_value": "",
     "service_id": 12,
+    'description':"descrição"
 },
 {
     "order": 1,
@@ -212,6 +219,7 @@ job = [{
     "action": "status",
     "action_value": "alembic_version",
     "service_id": 16,
+    'description':"descrição"
 },
 {
     "order": 1,
@@ -219,25 +227,39 @@ job = [{
     "action": "XPATH",
     "action_value": "//header/nav/div/a@[href='#me']",
     "service_id": 17,
+    'description':"descrição"
 },
 {
     "order": 1,
     "url": "https://clicklav.com.br/",
     "action": "XPATH",
-    "action_value": "//header/div/svg[@class='logo']",
+    "action_value": "//*[@id='root']/div/header/nav/button[@class='menuToogle']",
     "service_id": 21,
+    'description':"descrição"
+},
+{
+    "order": 1,
+    "url": "https://blog.orango.io/",
+    "action": "XPATH",
+    "action_value": "//div[@class='header']/img[@class='logo']",
+    "service_id": 2,
+    'description':"descrição"
 },
 ]
 
+print("seed status")
 for x in initialStatus:
     if JopRecordStatus.find_by_name(x['value']) is None:
         JopRecordStatus(**x).save()
+print("seed service_group")
 for x in service_group:
     if Service_group.find_by_name(x['name']) is None:
         Service_group(**x).save()
+print("seed service")
 for x in service:
     if Service.find_by_name(x['name'],x['service_group_id']) is None:
         Service(**x).save()
+print("seed job")
 for x in job:
     Job(**x).save()
 # Service_group(**service_group).save()

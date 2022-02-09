@@ -3,7 +3,7 @@ from app.Models.Service import Service
 from flask import jsonify,Response
 
 class JobController:
-    def create(self,order,url,action,actionValue,serviceId):
+    def create(self,order,url,action,actionValue,serviceId,description):
         try:
             if Service.find_by_id(serviceId) is None:
                 return Response('{"error":"service not exist"}', status=404, mimetype='application/json')
@@ -12,7 +12,8 @@ class JobController:
                 'url':url,
                 'action':action,
                 'action_value':actionValue,
-                'service_id':serviceId
+                'service_id':serviceId,
+                'description':description
                 }
             newJob =Job(**jobValues).save()
             return jsonify(
@@ -22,7 +23,8 @@ class JobController:
                 action=newJob.action,
                 actionValue=newJob.action_value,
                 serviceId=newJob.service_id,
-                createdAt=newJob.created_at
+                createdAt=newJob.created_at,
+                description=newJob.description
             )
         except: 
             return Response('{"error":"server error"}', status=500, mimetype='application/json')

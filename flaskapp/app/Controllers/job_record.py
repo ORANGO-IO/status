@@ -24,12 +24,12 @@ class Job_record_controller:
             job = Job.find_by_id(job_id)
             if job is None:
                 return Response('{"error":"job not exist"}', status=404, mimetype='application/json')
-        except:
+        except e:
             return Response('{"error":"server error in job"}', status=404, mimetype='application/json')
 
         if not job.action == 'XPATH':
             initialTime = time.time()
-            response = functions[job.action]()
+            response = functions[job.action](job.url)
             if response:
                 finishedTime = time.time()
                 getstatus = JopRecordStatus.find_by_name('online')
@@ -56,7 +56,7 @@ class Job_record_controller:
                 return Response('{"error":"job {job.service.name} offline"}', status=500, mimetype='application/json')
 
         try:
-            image_name = f'{job.service.name}_SUBSERVICE_NAME_{datetime.now().strftime("%Y_%m_%d__%H_%M_%S")}'
+            image_name = f'{job.service.service_group.name}_{job.service.name}_{datetime.now().strftime("%Y_%m_%d__%H_%M_%S")}'
             image_path = f"{ROOT_PATH}/image_records/{image_name}.png"
             initialTime = time.time()
 
@@ -87,15 +87,22 @@ class Job_record_controller:
                 status_id=job_record.status_id,
                 createdAt=job_record.created_at
             )
-        except:
+        except TypeError:
             finishedTime = time.time()
             getstatus = JopRecordStatus.find_by_name('offline')
-            JobRecord(**{
+            job_record =JobRecord(**{
                 'job_id': job.id,
                 'status_id': getstatus.id,
                 'time_spent_in_sec': finishedTime - initialTime,
             }).save()
-            return Response('{"error":"job {job.service.name} offline"}', status=500, mimetype='application/json')
+            return jsonify(
+                id=job_record.id,
+                time_spent_in_sec=job_record.time_spent_in_sec,
+                service_id=job_record.id,
+                status_id=job_record.status_id,
+                createdAt=job_record.created_at
+            )
+            # return Response('{"error":"job {job.service.name} offline"}', status=500, mimetype='application/json')
 
     def all(self):
         print("==================== CAPTURANDO TODOS OS JOB RECORDS ====================")

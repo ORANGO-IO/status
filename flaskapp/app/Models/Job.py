@@ -9,6 +9,7 @@ class Job(db.Model):
     order = db.Column(db.Integer,nullable=False)
     url = db.Column(db.String,nullable=False)
     action = db.Column(db.String,nullable=True)
+    description = db.Column(db.String,nullable=True)
     action_value = db.Column(db.String,nullable=True)
     service_id = db.Column(db.Integer,db.ForeignKey('services.id'),nullable=True)
     created_at = db.Column(db.DateTime(timezone=True),

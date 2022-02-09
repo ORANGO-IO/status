@@ -1,10 +1,11 @@
 import requests
 
-def alembic_version(self,url):
-    response =requests.get(url)
+def alembic_version(url):
+    response =requests.get(url, )
     if response.status_code == 200:
         json = response.json()
-        if json.alembic_version:
+        print(json)
+        if json and json['alembic_version']:
             return True 
         return False
     return False

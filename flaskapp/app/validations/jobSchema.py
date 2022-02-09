@@ -7,7 +7,8 @@ jobSchema = {
             'type':'string'
         },
         'actionValue':{'type':'string'},
-        'serviceId':{'type':'integer'}
+        'serviceId':{'type':'integer'},
+        'description':{'type':'string'}
     },
-    'required': ['order','url','action','actionValue','serviceId']
+    'required': ['order','url','action','actionValue','serviceId','description']
 }

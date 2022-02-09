@@ -8,6 +8,7 @@ from app.Controllers.serviceController import ServiceController
 from app.Controllers.job import JobController
 from app.Controllers.job_record import Job_record_controller
 from app.Controllers.service_group import Service_Group_Controller
+from app.Models.Job import Job
 
 # Loading parent folder
 sys.path.append('../app')
@@ -37,7 +38,7 @@ def service_postbaker_frontend():
 def job():
     if request.method == 'POST':
         req = request.get_json()
-        return jobController.create(req.get('order'), req.get('url'), req.get('action'), req.get('actionValue'), req.get('serviceId'))
+        return jobController.create(req.get('order'), req.get('url'), req.get('action'), req.get('actionValue'), req.get('serviceId'),req.get('description'))
     return jobController.all()
 
 
@@ -46,6 +47,17 @@ def job():
 def createService():
     req = request.get_json()
     return serviceController.create(req.get('name'), req.get('service_group_id'))
+
+@services_routes.route('/teste/execute_jobs')
+def executeTestAllJobs():
+    jobs = Job.query.order_by(Job.order).all()
+    array_response = []
+    for job in jobs:
+        response =job_record_controller.create(job.id)
+        array_response.append(response)
+    return "terminou"
+    
+
 
 
 @services_routes.route('/verify_service/<job_id>', methods=['POST'])
