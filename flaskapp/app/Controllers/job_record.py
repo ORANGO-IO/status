@@ -24,7 +24,7 @@ class Job_record_controller:
             job = Job.find_by_id(job_id)
             if job is None:
                 return Response('{"error":"job not exist"}', status=404, mimetype='application/json')
-        except e:
+        except Exception:
             return Response('{"error":"server error in job"}', status=404, mimetype='application/json')
 
         if not job.action == 'XPATH':
