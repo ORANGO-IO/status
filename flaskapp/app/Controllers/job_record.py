@@ -61,6 +61,7 @@ class Job_record_controller:
             initialTime = time.time()
 
             driver.get(f'{job.url}')
+            time.sleep(5)
             driver.get_screenshot_as_file(image_path)
             convert_compress(image_path)
             driver.find_element(By.XPATH, job.action_value).is_displayed()
