@@ -7,3 +7,11 @@ docker-compose up -d
 # use http://localhost:5005/service/lithocenter_frontend para testar o fluxo do frontend
 docker-compose logs -f
 ```
+
+## Rodar as migrations e seeds
+Entre no terminal do container do flaskapp e rode os seguintes comandos:
+
+```sh
+python -m flask db migrate
+python -m flask db seed
+```
