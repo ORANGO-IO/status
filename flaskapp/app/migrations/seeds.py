@@ -24,7 +24,7 @@ initialStatus = [
 
 service_group = [
     {
-     "name": "lithocenter"
+        "name": "lithocenter"
     },
     {
         "name": "postbaker"
@@ -33,128 +33,128 @@ service_group = [
         "name": "orango"
     },
     {
-        "name":"Blog Orango"
+        "name": "Blog Orango"
     },
     {
-        "name":"itmpr"
+        "name": "itmpr"
     },
     {
-        "name":"Filipe lopes"
+        "name": "Filipe lopes"
     },
     {
-        "name":"Calc"
+        "name": "Calc"
     },
     {
-        "name":"clicklav"
+        "name": "clicklav"
     },
     {
-        "name":"teleatendimento"
+        "name": "teleatendimento"
     }
 ]
 
 service = [
     {
-    "name": "frontend",
-    "service_group_id": 3
-},
- {
-    "name": "frontend",
-    "service_group_id": 4
-},{
-    "name": "backend",
-    "service_group_id": 4
-},{
-    "name": "database",
-    "service_group_id": 4
-},
-{
-    "name":"Painel adiministrativo",
-    "service_group_id":4,
-},
-{
-    "name":"frontend",
-    "service_group_id":2,
-},
-{
-    "name":"backend",
-    "service_group_id":2,
-},
-{
-    "name":"database",
-    "service_group_id":2
-},
-{
-    "name":"frontend",
-    "service_group_id":5,
-},
-{
-    "name":"frontend beta",
-    "service_group_id":5,
-},
-{
-    "name":"frontend beta",
-    "service_group_id":9
-},
-{
-    "name":"backend beta",
-    "service_group_id":9
-},
-{
-    "name":"banco de dados beta",
-    "service_group_id":9
-},
-{
-    "name":"frontend",
-    "service_group_id":9
-},
-{
-    "name":"backend",
-    "service_group_id":9
-},
-{
-    "name":"banco de dados",
-    "service_group_id":9
-},
-{
-    "name":"frontend",#17
-    "service_group_id":6
-},
-{
-    "name":"backend",
-    "service_group_id":6
-},
-{
-    "name":"banco de dados",
-    "service_group_id":6
-},
-{
-    "name":"frontend",
-    "service_group_id":7
-},
-{
-    "name":"frontend beta",
-    "service_group_id":8 #21
-},
-{
-    "name":"backend beta",
-    "service_group_id":8
-},
-{
-    "name":"banco de dados beta",
-    "service_group_id":8
-},
-{
-    "name":"frontend",
-    "service_group_id":8
-},
-{
-    "name":"backend",
-    "service_group_id":8
-},
-{
-    "name":"banco de dados",
-    "service_group_id":8
-},
+        "name": "frontend",
+        "service_group_id": 3
+    },
+    {
+        "name": "frontend",
+        "service_group_id": 4
+    }, {
+        "name": "backend",
+        "service_group_id": 4
+    }, {
+        "name": "database",
+        "service_group_id": 4
+    },
+    {
+        "name": "Painel adiministrativo",
+        "service_group_id": 4,
+    },
+    {
+        "name": "frontend",
+        "service_group_id": 2,
+    },
+    {
+        "name": "backend",
+        "service_group_id": 2,
+    },
+    {
+        "name": "database",
+        "service_group_id": 2
+    },
+    {
+        "name": "frontend",
+        "service_group_id": 5,
+    },
+    {
+        "name": "frontend beta",
+        "service_group_id": 5,
+    },
+    {
+        "name": "frontend beta",
+        "service_group_id": 9
+    },
+    {
+        "name": "backend beta",
+        "service_group_id": 9
+    },
+    {
+        "name": "banco de dados beta",
+        "service_group_id": 9
+    },
+    {
+        "name": "frontend",
+        "service_group_id": 9
+    },
+    {
+        "name": "backend",
+        "service_group_id": 9
+    },
+    {
+        "name": "banco de dados",
+        "service_group_id": 9
+    },
+    {
+        "name": "frontend",  # 17
+        "service_group_id": 6
+    },
+    {
+        "name": "backend",
+        "service_group_id": 6
+    },
+    {
+        "name": "banco de dados",
+        "service_group_id": 6
+    },
+    {
+        "name": "frontend",
+        "service_group_id": 7
+    },
+    {
+        "name": "frontend beta",
+        "service_group_id": 8  # 21
+    },
+    {
+        "name": "backend beta",
+        "service_group_id": 8
+    },
+    {
+        "name": "banco de dados beta",
+        "service_group_id": 8
+    },
+    {
+        "name": "frontend",
+        "service_group_id": 8
+    },
+    {
+        "name": "backend",
+        "service_group_id": 8
+    },
+    {
+        "name": "banco de dados",
+        "service_group_id": 8
+    },
 
 ]
 job = [{
@@ -163,87 +163,87 @@ job = [{
     "action": "XPATH",
     "action_value": "//div[@class='header']/img[@alt='logo']",
     "service_id": 1,
-    'description':"descrição"
+    'description': "descrição"
 },
-{
+    {
     "order": 2,
     "url": "https://strapi.orango.io/",
     "action": "XPATH",
     "action_value": "//section[@class='wrapper']/h1/img[@class='logo']",
     "service_id": 5,
-    'description':"descrição"
+    'description': "descrição"
 },
-{
+    {
     "order": 3,
     "url": "https://strapi.orango.io/admin/auth/login",
     "action": "XPATH",
-    "action_value": "//*[@id='app']/div/div",
+    "action_value": '//*[@id="app"]/div/div[3]/div/div[2]/section[1]/img',
     "service_id": 5,
-    'description':"descrição"
+    'description': "descrição"
 },
-{
+    {
     "order": 1,
     "url": "https://beta.itmpr.com.br/adm/",
     "action": "XPATH",
     "action_value": "//div[@id='intro-logo']/img",
     "service_id": 10,
-    'description':"descrição"
+    'description': "descrição"
 },
-{
+    {
     "order": 2,
     "url": "https://itmpr.com.br",
     "action": "XPATH",
     "action_value": "//header[@id='mainheader']/img[@id='mainlogo']",
     "service_id": 9,
-    'description':"descrição"
+    'description': "descrição"
 },
-{
+    {
     "order": 2,
     "url": "https://teleatendimento.orango.io/login",
     "action": "XPATH",
     "action_value": "//header/img[@alt='lines']",
     "service_id": 11,
-    'description':"descrição"
+    'description': "descrição"
 },
-{
+    {
     "order": 1,
     "url": "https://teleatendimento.orango.io/api/v1/",
     "action": "status",
     "action_value": "",
     "service_id": 12,
-    'description':"descrição"
+    'description': "descrição"
 },
-{
+    {
     "order": 1,
     "url": "https://teleatendimento.orango.io/api/v1/alembic_version",
     "action": "status",
     "action_value": "alembic_version",
     "service_id": 16,
-    'description':"descrição"
+    'description': "descrição"
 },
-{
+    {
     "order": 1,
     "url": "https://filipelopes.me/",
     "action": "XPATH",
     "action_value": "//header/nav/div/a@[href='#me']",
     "service_id": 17,
-    'description':"descrição"
+    'description': "descrição"
 },
-{
+    {
     "order": 1,
     "url": "https://clicklav.com.br/",
     "action": "XPATH",
     "action_value": "//*[@id='root']/div/header/nav/button[@class='menuToogle']",
     "service_id": 21,
-    'description':"descrição"
+    'description': "descrição"
 },
-{
+    {
     "order": 1,
     "url": "https://blog.orango.io/",
     "action": "XPATH",
     "action_value": "//div[@class='header']/img[@class='logo']",
     "service_id": 2,
-    'description':"descrição"
+    'description': "descrição"
 },
 ]
 
@@ -257,7 +257,7 @@ for x in service_group:
         Service_group(**x).save()
 print("seed service")
 for x in service:
-    if Service.find_by_name(x['name'],x['service_group_id']) is None:
+    if Service.find_by_name(x['name'], x['service_group_id']) is None:
         Service(**x).save()
 print("seed job")
 for x in job:
