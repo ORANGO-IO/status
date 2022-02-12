@@ -17,3 +17,5 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./cron/crontab.txt:/crontab.txt
+    depends_on:
+      - flaskapp
