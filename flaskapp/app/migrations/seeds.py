@@ -177,7 +177,7 @@ job = [{
     "order": 3,
     "url": "https://strapi.orango.io/admin/auth/login",
     "action": "XPATH",
-    "action_value": '//*[@id="app"]/div/div[3]/div/div[2]/section[1]/img',
+    "action_value": "//*[@id='app']/div/div[3]/div/div[2]/section[1]/img",
     "service_id": 5,
     'description': "descrição"
 },
