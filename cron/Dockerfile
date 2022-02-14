@@ -1,4 +1,4 @@
-FROM amd64/alpine
+FROM alpine:3.3
 
 ADD crontab.txt /crontab.txt
 ADD script.sh /script.sh
