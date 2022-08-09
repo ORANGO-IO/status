@@ -7,7 +7,7 @@ class ServiceController:
         try:
             if Service_group.find_by_id(service_group_id) is None:
                 return Response('{"error":"service_group not exist"}', status=400, mimetype='application/json')
-            if not Service.find_by_name(name.upper()) is None:
+            if not Service.find_by_name(name.upper(),service_group_id) is None:
                 return Response('{"error":"service already exist"}', status=400, mimetype='application/json')
             newService = Service(**{"name":name.upper(),"service_group_id":service_group_id}).save()
             return jsonify(

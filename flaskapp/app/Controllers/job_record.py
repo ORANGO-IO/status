@@ -1,6 +1,5 @@
 from datetime import datetime
 import time
-import locale
 from app.settings import ROOT_PATH
 from app.utils.images import convert_compress
 from app.utils.selenium import driver
@@ -65,7 +64,6 @@ class Job_record_controller:
             driver.get_screenshot_as_file(image_path)
             convert_compress(image_path)
             driver.find_element(By.XPATH, job.action_value).is_displayed()
-
             finishedTime = time.time()
             getstatus = JopRecordStatus.find_by_name('online')
             job_record = JobRecord(**{
@@ -88,7 +86,7 @@ class Job_record_controller:
                 status_id=job_record.status_id,
                 createdAt=job_record.created_at
             )
-        except TypeError:
+        except:
             finishedTime = time.time()
             getstatus = JopRecordStatus.find_by_name('offline')
             job_record =JobRecord(**{
