@@ -1,3 +1,4 @@
 # m h dom mon dow user  command
 * * * * * /script.sh >> /var/log/script.log
 * * * * * wget -O - http://flaskapp:5000/cron_job_test > /dev/null 2>&1
+    
