@@ -103,6 +103,44 @@ class Job_record_controller:
             )
             # return Response('{"error":"job {job.service.name} offline"}', status=500, mimetype='application/json')
 
+    def append_job_record_when_len_zero(self,job_record):
+        count_online = 0
+        count_offline = 0
+        new_job_record ={}
+        if job_record.status.value == 'online':
+            count_online += 1
+        else:
+            count_offline +=1
+        date_time_format = job_record.created_at.strftime('Última atualização %d de %B de %Y %H:%M')
+        new_job_record={
+            "service_group": job_record.job.service.service_group.name,
+            "services": [
+                {
+                    "id": job_record.job.service.id,
+                    "name": job_record.job.service.name,
+                    "status":job_record.status.value,
+                    "last_updated":job_record.created_at,
+                    "date_time_format":date_time_format,
+                    "jobs": [
+                        {
+                            'id': job_record.id,
+                            'status': job_record.status.value,
+                            'time_spent_in_sec': job_record.time_spent_in_sec,
+                            'job': {
+                                "id": job_record.job.id,
+                                "order": job_record.job.order,
+                                "url": job_record.job.url,
+                                "action": job_record.job.action,
+                                "action_value": job_record.job.action_value,
+                            }
+                        }
+                    ]
+
+                }
+            ]
+        }
+        return {"new_job_record":new_job_record,"count_offline":count_offline,"count_online":count_online}
+
     def all(self):
         print("==================== CAPTURANDO TODOS OS JOB RECORDS ====================")
         jobs_records = JobRecord.query.order_by(JobRecord.id).all()
@@ -112,40 +150,10 @@ class Job_record_controller:
         count_offline = 0
         for job_record in jobs_records:
             if jobs_record_array.__len__() == 0:
-                date_time_format = job_record.created_at.strftime('Última atualização %d de %B de %Y %H:%M')
-                if job_record.status.value == 'online':
-                    count_online += 1
-                else:
-                    count_offline +=1
-                jobs_record_array.append({
-                    "service_group": job_record.job.service.service_group.name,
-                    "services": [
-                        {
-                            "id": job_record.job.service.id,
-                            "name": job_record.job.service.name,
-                            "status":job_record.status.value,
-                            "last_updated":job_record.created_at,
-                            "date_time_format":date_time_format,
-                            "jobs": [
-                                {
-                                    'id': job_record.id,
-                                    'status': job_record.status.value,
-                                    'time_spent_in_sec': job_record.time_spent_in_sec,
-                                    'job': {
-                                        "id": job_record.job.id,
-                                        "order": job_record.job.order,
-                                        "url": job_record.job.url,
-                                        "action": job_record.job.action,
-                                        "action_value": job_record.job.action_value,
-                                    }
-                                }
-                            ]
-
-                        }
-                    ]
-
-                })
-
+                verify_job_record = self.append_job_record_when_len_zero(job_record)
+                count_online +=verify_job_record['count_online']
+                count_offline +=verify_job_record['count_offline']
+                jobs_record_array.append(verify_job_record['new_job_record'])
             else:
                 for index, x in enumerate(jobs_record_array):
                     if job_record.job.service.service_group.name == x["service_group"]:

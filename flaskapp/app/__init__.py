@@ -22,7 +22,7 @@ def cron_job_test():
     return response
 
 
-@ app.route('/details')
+@ app.route('/details/<job_id>')
 def details():
     return render_template('details.html', json=job_record_controller.all())
 

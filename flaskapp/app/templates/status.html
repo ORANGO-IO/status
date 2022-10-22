@@ -13,13 +13,15 @@
     {% for j in i.services %}
       <ul>
         <li>
-          <a>
+          <div class="option">
             <span class={{j.status}}></span>
             <p>{{j.name}}</p>
             <!-- <em>Última atualização 02 de Dezembro de 2021 04:56</em> -->
             <em>{{j.date_time_format}}</em>
-            <p class="detail">Clique para mais detalhes</p>
-        </a>
+            <a href="/details">
+              <p class="detail">Clique para mais detalhes</p>
+            </a>
+          </div>
         </li>
       </ul>
     {%endfor%}

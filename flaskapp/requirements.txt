@@ -10,3 +10,4 @@ Flask-DB==0.2.0
 selenium==3.141.0
 Pillow==8.3.2
 flask-expects-json==1.7.0
+flask_scss===0.5

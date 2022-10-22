@@ -100,24 +100,26 @@ main {
 
       ul{
         list-style:none;
-        li a{
+        li > .option{
           cursor: pointer;
           display: flex;
           margin-top: 8px;
           align-items: center;
+          display:flex;
 
           p,em,.detail{
             color: #7B7B7B;
 
           }
 
-          .detail{
+          a,.detail{
             opacity: 0;
             transition:opacity 0.5s linear;
             font-family: Roboto;
             font-size: 10px;
             font-weight: bold;
             margin-left: 16px;
+            text-decoration: none;
           }
 
           p{
@@ -165,7 +167,7 @@ main {
 
           &:hover{
 
-            .detail{
+            a,.detail{
               opacity: 1;
             }
           }
