@@ -66,6 +66,11 @@ def create_job_record(job_id=None):
         return job_record_controller.create(job_id)
     return Response('{"error":"job_id not is integer"}', status=404, mimetype='application/json')
 
+@services_routes.route("/service/jobs_record")
+def service_by_jobs_records():
+    return job_record_controller.get_job_records_by_service(service_id=1)
+
+
 
 @services_routes.route('/job_record')
 def get_job_record():

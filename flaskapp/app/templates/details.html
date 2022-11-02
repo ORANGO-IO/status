@@ -1,6 +1,98 @@
 {% extends 'base.html' %}
 
 {% block show_service %}
-  <h2 class="detail_title"><strong>Aplicação 1</strong> Backend</h2>
-  <h2 class="secondary">· Mais Detalhes</h2>
+  <div>
+    <h2 class="detail_title"><strong>Aplicação 1</strong> Backend</h2>
+    <h2 class="secondary">· Mais Detalhes</h2>
+  </div>
+  
+   
+{% endblock %}
+{% block content %}
+
+<div>
+  <h3>Histórico de Status</h3>
+  <select>
+    {% for year in jobs.jobs_records.years %}
+   <option value ={{year}}></option>
+  {%endfor%}  
+  </select>
+  <select>
+    {% for month in jobs.jobs_records.months %}
+   <option value={{month}}></option>
+  {%endfor%}
+  </select>
+
+</div>
+<div>
+  <canvas id="myChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+
+  const jobs = JSON.parse('{{ json | tojson }}')
+  console.log("values",jobs)
+  const labels = [
+    'January',
+    'February',
+  ];
+  const backgrounds =[]
+  jobs.jobs_records.forEach(job =>{
+    if(job.status === 'online'){
+      backgrounds.push("green")
+    }else{
+      backgrounds.push("red")
+    }
+  })
+
+  const data = {
+    labels: labels,
+    datasets: [{
+      
+      backgroundColor:backgrounds,
+      data: jobs.jobs_records,
+    }]
+  };
+
+  const config = {
+    type: 'scatter',
+    data: data,
+    pointStyle:"circle",
+    options: {
+      parsing: {
+        xAxisKey: 'day',
+        yAxisKey: 'hour'
+    },
+    hitRadius:10,
+    radius:5,
+    plugins: {
+    legend: {
+      display: false
+    }
+  },
+    scales: {
+        y: {
+            max: 24,
+            min: 1,
+            ticks: {
+                stepSize: 3
+            }
+        },
+        x:{
+          max:31,
+          min:0,
+          tiks:{
+            stepSize:3
+          }
+        }
+    }
+}
+  };
+
+  const myChart = new Chart(
+  document.getElementById('myChart'),
+  config
+);
+</script>
 {% endblock %}
