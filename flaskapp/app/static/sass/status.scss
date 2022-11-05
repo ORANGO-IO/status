@@ -17,6 +17,8 @@
 .service_group_header{
     display:flex;
     column-gap:16px;
+
+
     .button_test{
         display:flex;
         width: 105px;
@@ -33,6 +35,12 @@
         font-weight: 400;
         font-size: 20px;
         color: #565656;
+
+    }
+}
+
+.loading{ li > .option span{
+        background:gray !important;
 
     }
 }

@@ -8,6 +8,7 @@ from app.Controllers.serviceController import ServiceController
 from app.Controllers.job import JobController
 from app.Controllers.job_record import Job_record_controller
 from app.Controllers.service_group import Service_Group_Controller
+from app.Controllers.service_record import Service_record_controller
 from app.Models.Job import Job
 
 # Loading parent folder
@@ -17,6 +18,7 @@ job_record_controller = Job_record_controller()
 serviceController = ServiceController()
 jobController = JobController()
 service_group_controller = Service_Group_Controller()
+service_record_controller = Service_record_controller()
 services_routes = Blueprint('services_routes', __name__,
                             template_folder='templates',)
 
@@ -55,16 +57,14 @@ def executeTestAllJobs():
     for job in jobs:
         response =job_record_controller.create(job.id)
         array_response.append(response)
-    return "terminou"
-    
+    return Response(status=201)
 
-
-
-@services_routes.route('/verify_service/<job_id>', methods=['POST'])
-def create_job_record(job_id=None):
-    if type(int(job_id)) == int:
-        return job_record_controller.create(job_id)
-    return Response('{"error":"job_id not is integer"}', status=404, mimetype='application/json')
+@services_routes.route('/verify_service/<service_id>', methods=['POST'])
+def create_job_record(service_id=None):
+    if type(int(service_id)) == int:
+        response = service_record_controller.create(service_id)
+        return response
+    return Response('{"error":"service_id not is integer"}', status=404, mimetype='application/json')
 
 @services_routes.route("/service/jobs_record")
 def service_by_jobs_records():

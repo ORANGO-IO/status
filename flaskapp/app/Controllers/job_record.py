@@ -1,24 +1,15 @@
-from datetime import datetime
-import time
-from app.settings import ROOT_PATH
-from app.utils.images import convert_compress
-from app.utils.selenium import driver
-from app.Models.Screenshot import Screenshot
-from app.Models.JopRecordStatus import JopRecordStatus
+
 from app.Models.JobRecord import JobRecord
 from app.Models.Job import Job
 from flask import jsonify, Response
-from app.functions import functions
 from app.Models.Service import Service
-from selenium.webdriver.common.by import By
-
+from app.services.job_record import record_job
 
 
 class Job_record_controller:
     
     def create(self, job_id):
         print('job_record')
-        initialTime = 0
         job = ''
         try:
             job = Job.find_by_id(job_id)
@@ -26,76 +17,8 @@ class Job_record_controller:
                 return Response('{"error":"job not exist"}', status=404, mimetype='application/json')
         except Exception:
             return Response('{"error":"server error in job"}', status=404, mimetype='application/json')
-
-        if not job.action == 'XPATH':
-            initialTime = time.time()
-            response = functions[job.action](job.url)
-            if response:
-                finishedTime = time.time()
-                getstatus = JopRecordStatus.find_by_name('online')
-                job_record = JobRecord(**{
-                    'job_id': job.id,
-                    'status_id': getstatus.id,
-                    'time_spent_in_sec': finishedTime - initialTime,
-                }).save()
-                return jsonify(
-                    id=job_record.id,
-                    time_spent_in_sec=job_record.time_spent_in_sec,
-                    service_id=job_record.id,
-                    status_id=job_record.status_id,
-                    createdAt=job_record.created_at
-                )
-            else:
-                finishedTime = time.time()
-                getstatus = JopRecordStatus.find_by_name('offline')
-                JobRecord(**{
-                    'job_id': job.id,
-                    'status_id': getstatus.id,
-                    'time_spent_in_sec': finishedTime - initialTime,
-                }).save()
-                return Response('{"error":"job {job.service.name} offline"}', status=500, mimetype='application/json')
-
-        try:
-            image_name = f'{job.service.service_group.name}_{job.service.name}_{datetime.now().strftime("%Y_%m_%d__%H_%M_%S")}'
-            image_path = f"{ROOT_PATH}/image_records/{image_name}.png"
-            initialTime = time.time()
-
-            driver.get(f'{job.url}')
-            time.sleep(5)
-            driver.get_screenshot_as_file(image_path)
-            convert_compress(image_path)
-            driver.find_element(By.XPATH, job.action_value).is_displayed()
-            finishedTime = time.time()
-            getstatus = JopRecordStatus.find_by_name('online')
-            job_record = JobRecord(**{
-                'job_id': job.id,
-                'status_id': getstatus.id,
-                'time_spent_in_sec': finishedTime - initialTime,
-            }).save()
-            image = {
-                "url": image_path,
-                "mime_type": "images/png",
-                "job_record_id": job_record.id
-            }
-            Screenshot(**image).save()
-
-            print(finishedTime - initialTime)
-            return jsonify(
-                id=job_record.id,
-                time_spent_in_sec=job_record.time_spent_in_sec,
-                service_id=job_record.id,
-                status_id=job_record.status_id,
-                createdAt=job_record.created_at
-            )
-        except:
-            finishedTime = time.time()
-            getstatus = JopRecordStatus.find_by_name('offline')
-            job_record =JobRecord(**{
-                'job_id': job.id,
-                'status_id': getstatus.id,
-                'time_spent_in_sec': finishedTime - initialTime,
-            }).save()
-            return jsonify(
+        job_record = record_job(job)
+        return jsonify(
                 id=job_record.id,
                 time_spent_in_sec=job_record.time_spent_in_sec,
                 service_id=job_record.id,

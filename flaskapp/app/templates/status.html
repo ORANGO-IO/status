@@ -8,7 +8,7 @@
 
 {% block content %}
 {% for i in json.jobs_record_array %}
-<div class="service_group_header">
+<div class="service_group_header ">
   <h2>{{i.service_group}}</h2>
   <button type="button" class="button_test" id="{{i.id}}">
     <svg width="11" height="14" viewBox="0 0 11 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -21,13 +21,13 @@
   <div class="services"> 
     <h3>Serviços</h3>
     <div >
-      <ul>
+      <ul id="{{i.id}}-container">
       {% for j in i.services %}
-          <li>
+          <li id="{{j.id}}">
             <div class="option">
-                <span class={{j.status}}></span>
+                <span id="{{j.id}}-status" class={{j.status}}></span>
                 <p>{{j.name}}</p>
-                <em>{{j.date_time_format}}</em>
+                <em id="{{j.id}}-dateFormat">{{j.date_time_format}}</em>
               <a href="/details/{{j.id}}">
                 <p class="detail">Clique para mais detalhes</p>
               </a>
@@ -43,7 +43,22 @@
   const buttonsOptions = document.querySelectorAll(".button_test")
   buttonsOptions.forEach(buttonOption =>{
     buttonOption.addEventListener("click",(e)=>{
-      fetch(`/service/verify_service/${e.target.id}`,{method:"POST"})
+      const status = document.getElementById(`${e.target.id}-status`)
+      const container = document.getElementById(`${e.target.id}-container`)
+      container.classList.add("loading")
+      fetch(`/service/verify_service/${e.target.id}`,{method:"POST"}).then(response =>{
+        response.json().then(data=>{
+          console.log("data",data)
+          data.jobs_records.forEach(job_record =>{
+            const status = document.getElementById(`${job_record.id}-status`)
+            const dateFormat = document.getElementById(`${job_record.id}-dateFormat`)
+            dateFormat.innerHTML = job_record.date_time_format
+            status.className = job_record.status
+          })
+      container.classList.remove("loading")
+
+        })
+      })
     })
   })
 </script>
