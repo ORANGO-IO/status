@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+
 {% block show_service %}
   <h2 class="on">{{json.count_online}} serviços <strong>online</strong></h2>
   <h2 class="off">{{json.count_offline}} serviços <strong>offline</strong></h2>
@@ -7,67 +8,43 @@
 
 {% block content %}
 {% for i in json.jobs_record_array %}
+<div class="service_group_header">
   <h2>{{i.service_group}}</h2>
-  <h3>Serviços</h3>
-  <div>
-    <ul>
-    {% for j in i.services %}
-        <li>
-          <div class="option">
-            <button class="button_option" id={{j.id}} type="button">
-              <span class={{j.status}}></span>
-              <p>{{j.name}}</p>
-              <em>{{j.date_time_format}}</em>
+  <button type="button" class="button_test" id="{{i.id}}">
+    <svg width="11" height="14" viewBox="0 0 11 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0V14L11 7L0 0Z" fill="#565656"/>
+      </svg>
+      
+    Testar
+  </button>
+</div>
+  <div class="services"> 
+    <h3>Serviços</h3>
+    <div >
+      <ul>
+      {% for j in i.services %}
+          <li>
+            <div class="option">
+                <span class={{j.status}}></span>
+                <p>{{j.name}}</p>
+                <em>{{j.date_time_format}}</em>
+              <a href="/details/{{j.id}}">
+                <p class="detail">Clique para mais detalhes</p>
+              </a>
+            </div>
+          </li>
+          {%endfor%}
+        </ul>
+    </div>
 
-            </button>
-            <a href="/details/{{j.id}}">
-              <p class="detail">Clique para mais detalhes</p>
-            </a>
-          </div>
-        </li>
-        {%endfor%}
-      </ul>
   </div>
 {%endfor%}
 <script>
-  const buttonsOptions = document.querySelectorAll(".button_option")
+  const buttonsOptions = document.querySelectorAll(".button_test")
   buttonsOptions.forEach(buttonOption =>{
     buttonOption.addEventListener("click",(e)=>{
-      fetch({method:"POST",url:`/services/verify_service/${e.id}`})
+      fetch(`/service/verify_service/${e.target.id}`,{method:"POST"})
     })
   })
 </script>
-  <!-- <h2>Aplicação 1</h2>
-  <div>
-    <h3>Serviços</h3>
-    <ul>
-      <li>
-          <a>
-              <span class="on"></span>
-              <p>Backend</p>
-              <em>Última atualização 02 de Dezembro de 2021 04:56</em>
-              <p class="detail">Clique para mais detalhes</p>
-
-          </a>
-      </li>
-      <li>
-          <a>
-              <span class="off"></span>
-              <p>Frontend</p>
-              <em>Última atualização 02 de Dezembro de 2021 04:56</em>
-              <p class="detail">Clique para mais detalhes</p>
-
-          </a>
-      </li>
-      <li>
-          <a>
-              <span class="off"></span>
-              <p>Banco de dados</p>
-              <em>Última atualização 02 de Dezembro de 2021 04:56</em>
-              <p class="detail">Clique para mais detalhes</p>
-
-          </a>
-      </li>
-    </ul>
-  </div> -->
 {% endblock %}
