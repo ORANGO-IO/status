@@ -103,36 +103,29 @@ class Job_record_controller:
                 createdAt=job_record.created_at
             )
 
-    def get_job_records_by_service(self,service_id,job_id):
-        jobs_records_response = JobRecord.query.join(Job).filter(Job.service_id == service_id and Job.id == job_id)
+    def get_job_records_by_service(self,service_id):
+        jobs_records_response = JobRecord.query.join(Job).filter(Job.service_id == service_id ).order_by(JobRecord.created_at.desc())
         service = Service.find_by_id(service_id)
         jobs_records = []
-        currentMonth =datetime.now().strftime("%m")
         for job_record in jobs_records_response:
-            month =job_record.created_at.strftime('%m')
-            if(month == currentMonth):
-                hour = job_record.created_at.strftime('%H')
-                day = job_record.created_at.strftime('%d')
-
-
-                current_job_record = {
-                    'id': job_record.id,
-                    'status': job_record.status.value,
-                    'month':month,
-                    'hour':hour,
-                    'day':day,
-                    'time_spent_in_sec': job_record.time_spent_in_sec,
-                    'job': {
-                        "id": job_record.job.id,
-                        "order": job_record.job.order,
-                        "url": job_record.job.url,
-                        "action": job_record.job.action,
-                        "action_value": job_record.job.action_value,
-                    },
-                    'created_at':job_record.created_at
-                }
-                jobs_records.append(current_job_record)
-
+            date_time_format = job_record.created_at.strftime('Verificado em %d de %B de %Y %H:%M')
+            current_job_record = {
+                'id': job_record.id,
+                'status': job_record.status.value,
+                'time_spent_in_sec': job_record.time_spent_in_sec,
+                'date_time_format':date_time_format,
+                'job': {
+                    "id": job_record.job.id,
+                    "order": job_record.job.order,
+                    "url": job_record.job.url,
+                    "action": job_record.job.action,
+                    "action_value": job_record.job.action_value,
+                    "description":job_record.job.description
+                },
+                'created_at':job_record.created_at
+            }
+            jobs_records.append(current_job_record)
+        
         return {"jobs_records":jobs_records,"name":service.name}
 
     def __create_object_job_record_if_name_equal_service_name(self,job_record,jobs_record_service):
@@ -186,6 +179,8 @@ class Job_record_controller:
                             count_offline +=create_record_to_jobs['count_offline']
                             count_online +=create_record_to_jobs['count_online']
                             service['jobs'].append(create_record_to_jobs['job_record'])
+                            if not service['status'] == create_record_to_jobs['job_record']['status']:
+                                service['status'] = 'warning'
                             exist_service = True
                     if not exist_service:
                         if job_record.status.value == 'online':

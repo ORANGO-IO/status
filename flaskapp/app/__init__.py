@@ -22,9 +22,10 @@ def cron_job_test():
     return response
 
 
-@ app.route('/details/<job_id>')
-def details():
-    return render_template('details.html', json=job_record_controller.all())
+@app.route('/details/<service_id>')
+def details(service_id=None):
+    if type(int(service_id)) == int:
+        return render_template('details.html', json=job_record_controller.get_job_records_by_service(service_id=service_id))
 
 
 app.register_blueprint(services_routes, url_prefix='/service')

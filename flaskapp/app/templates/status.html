@@ -10,22 +10,33 @@
   <h2>{{i.service_group}}</h2>
   <h3>Serviços</h3>
   <div>
+    <ul>
     {% for j in i.services %}
-      <ul>
         <li>
           <div class="option">
-            <span class={{j.status}}></span>
-            <p>{{j.name}}</p>
-            <em>{{j.date_time_format}}</em>
-            <a href="/details">
+            <button class="button_option" id={{j.id}} type="button">
+              <span class={{j.status}}></span>
+              <p>{{j.name}}</p>
+              <em>{{j.date_time_format}}</em>
+
+            </button>
+            <a href="/details/{{j.id}}">
               <p class="detail">Clique para mais detalhes</p>
             </a>
           </div>
         </li>
+        {%endfor%}
       </ul>
-    {%endfor%}
   </div>
 {%endfor%}
+<script>
+  const buttonsOptions = document.querySelectorAll(".button_option")
+  buttonsOptions.forEach(buttonOption =>{
+    buttonOption.addEventListener("click",(e)=>{
+      fetch({method:"POST",url:`/services/verify_service/${e.id}`})
+    })
+  })
+</script>
   <!-- <h2>Aplicação 1</h2>
   <div>
     <h3>Serviços</h3>

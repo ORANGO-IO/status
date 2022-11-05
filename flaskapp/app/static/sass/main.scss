@@ -107,6 +107,13 @@ main {
           align-items: center;
           display:flex;
 
+          button{
+            background: none;
+            outline: none;
+            border: none;
+            display: flex;
+          }
+
           p,em,.detail{
             color: #7B7B7B;
 
@@ -152,6 +159,11 @@ main {
                 background-color: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 53.95%), radial-gradient(65.29% 62.86% at 48.57% 48.57%, rgba(255, 255, 255, 0.19) 0%, rgba(255, 255, 255, 0) 100%);
            
               }}
+
+            &.warning{
+              background:linear-gradient(0deg, #ff9900, #ff9900), #ff9900;
+
+            }
 
             &.offline{
 

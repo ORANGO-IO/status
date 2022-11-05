@@ -2,7 +2,7 @@
 
 {% block show_service %}
   <div>
-    <h2 class="detail_title"><strong>Aplicação 1</strong> Backend</h2>
+    <h2 class="detail_title"><strong>Aplicação </strong> {{json.name}}</h2>
     <h2 class="secondary">· Mais Detalhes</h2>
   </div>
   
@@ -11,24 +11,30 @@
 {% block content %}
 
 <div>
-  <h3>Histórico de Status</h3>
-  <select>
-    {% for year in jobs.jobs_records.years %}
-   <option value ={{year}}></option>
-  {%endfor%}  
-  </select>
-  <select>
-    {% for month in jobs.jobs_records.months %}
-   <option value={{month}}></option>
-  {%endfor%}
-  </select>
+  <h2>Histórico de Status</h2>
+  <ul>
+    {% for i in json.jobs_records %}
+    <li>
+      <div class="option">
+        <button class="button_option" id={{i.id}} type="button">
+    
+        <span class={{i.status}}></span>
+        <p>{{i.job.description}}</p>
+        <em>{{i.date_time_format}}</em>
+      
+      </button>
+    
+      </div>
+      </li>
+    {%endfor%}
+
+
+  </ul>
 
 </div>
-<div>
-  <canvas id="myChart"></canvas>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 
   const jobs = JSON.parse('{{ json | tojson }}')
@@ -94,5 +100,5 @@
   document.getElementById('myChart'),
   config
 );
-</script>
+</script> -->
 {% endblock %}
