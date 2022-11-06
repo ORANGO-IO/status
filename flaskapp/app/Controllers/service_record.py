@@ -2,7 +2,7 @@
 from app.Models.Job import Job
 from flask import jsonify
 from app.Models.Service import Service
-from app.services.job_record import record_job
+from app.services.job_record_strategy import record_job_strategy
 
 class Service_record_controller:
     
@@ -11,7 +11,7 @@ class Service_record_controller:
         jobs_records = []
         jobs_records_order_by_service = []
         for job in jobs_filter_by_service:
-            job_record =record_job(job)
+            job_record =record_job_strategy(job)
             date_time_format = job_record.created_at.strftime('Última atualização %d de %B de %Y %H:%M')
 
             jobs_records.append({

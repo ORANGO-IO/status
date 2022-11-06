@@ -3,7 +3,7 @@ from app.Models.JobRecord import JobRecord
 from app.Models.Job import Job
 from flask import jsonify, Response
 from app.Models.Service import Service
-from app.services.job_record import record_job
+from app.services.job_record_strategy import record_job_strategy
 
 
 class Job_record_controller:
@@ -16,7 +16,7 @@ class Job_record_controller:
                 return Response('{"error":"job not exist"}', status=404, mimetype='application/json')
         except Exception:
             return Response('{"error":"server error in job"}', status=404, mimetype='application/json')
-        job_record = record_job(job)
+        job_record = record_job_strategy(job)
         return jsonify(
                 id=job_record.id,
                 time_spent_in_sec=job_record.time_spent_in_sec,

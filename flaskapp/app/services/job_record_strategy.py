@@ -9,40 +9,39 @@ from app.Models.Screenshot import Screenshot
 from app.Models.JopRecordStatus import JopRecordStatus
 from selenium.webdriver.common.by import By
 from app.Models.JobRecord import JobRecord
-from flask import jsonify, Response
+from flask import jsonify
 
-def record_job(job:Job):
+def record_job_default_strategy(job):
     initialTime = 0
+    initialTime = time.time()        
+    response = functions[job.action](job.url)
+    if response:
+        finishedTime = time.time()
+        getstatus = JopRecordStatus.find_by_name('online')
+        job_record = JobRecord(**{
+            'job_id': job.id,
+            'status_id': getstatus.id,
+            'time_spent_in_sec': finishedTime - initialTime,
+        }).save()
+        return jsonify(
+            id=job_record.id,
+            time_spent_in_sec=job_record.time_spent_in_sec,
+            service_id=job_record.id,
+            status_id=job_record.status_id,
+            createdAt=job_record.created_at
+        )
+    else:
+        finishedTime = time.time()
+        getstatus = JopRecordStatus.find_by_name('offline')
+        job_record =JobRecord(**{
+            'job_id': job.id,
+            'status_id': getstatus.id,
+            'time_spent_in_sec': finishedTime - initialTime,
+        }).save()
+        return job_record
 
-    if not job.action == 'XPATH':
-        initialTime = time.time()
-        response = functions[job.action](job.url)
-        if response:
-            finishedTime = time.time()
-            getstatus = JopRecordStatus.find_by_name('online')
-            job_record = JobRecord(**{
-                'job_id': job.id,
-                'status_id': getstatus.id,
-                'time_spent_in_sec': finishedTime - initialTime,
-            }).save()
-            return jsonify(
-                id=job_record.id,
-                time_spent_in_sec=job_record.time_spent_in_sec,
-                service_id=job_record.id,
-                status_id=job_record.status_id,
-                createdAt=job_record.created_at
-            )
-        else:
-            finishedTime = time.time()
-            getstatus = JopRecordStatus.find_by_name('offline')
-            job_record =JobRecord(**{
-                'job_id': job.id,
-                'status_id': getstatus.id,
-                'time_spent_in_sec': finishedTime - initialTime,
-            }).save()
-            return job_record
-
-
+def record_job_xpath_strategy(job):
+    initialTime = 0
     try:
         image_name = f'{job.service.service_group.name}_{job.service.name}_{datetime.now().strftime("%Y_%m_%d__%H_%M_%S")}'
         image_path = f"{ROOT_PATH}/image_records/{image_name}.png"
@@ -78,3 +77,18 @@ def record_job(job:Job):
             'time_spent_in_sec': finishedTime - initialTime,
         }).save()
         return job_record
+
+strategies = {
+    'XPATH': record_job_xpath_strategy,
+    'default': record_job_default_strategy,
+}
+
+def record_job_strategy(job:Job):
+    strategy = None
+    if job.action in strategies:
+        strategy = strategies[job.action]
+    else:
+        strategy = strategies['default']
+    return strategy(job)
+      
+
