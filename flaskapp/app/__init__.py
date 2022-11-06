@@ -1,7 +1,7 @@
 from flask import render_template, jsonify
 
 from app.routes import services_routes
-from app.services.db import app, db
+from app.config.app import app, db
 from app.Controllers.job_record import Job_record_controller
 
 
