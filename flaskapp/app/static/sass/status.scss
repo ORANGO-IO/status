@@ -17,7 +17,11 @@
 .service_group_header{
     display:flex;
     column-gap:16px;
-
+    align-items: center;
+    
+    .label_not_exist_services{
+        color:#7B7B7B
+    }
 
     .button_test{
         display:flex;

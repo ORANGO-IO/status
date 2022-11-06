@@ -10,6 +10,7 @@
 {% for i in json.jobs_record_array %}
 <div class="service_group_header ">
   <h2>{{i.service_group}}</h2>
+  {% if i.services.__len__() > 0: %}
   <button type="button" class="button_test" id="{{i.id}}">
     <svg width="11" height="14" viewBox="0 0 11 14" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M0 0V14L11 7L0 0Z" fill="#565656"/>
@@ -17,8 +18,12 @@
       
     Testar
   </button>
+  {% else %}
+    <p class="label_not_exist_services">{{i.if_not_exist_services}}</p>
+  {% endif %}
 </div>
   <div class="services"> 
+    {% if i.services.__len__() > 0: %}
     <h3>Serviços</h3>
     <div >
       <ul id="{{i.id}}-container">
@@ -36,10 +41,14 @@
           {%endfor%}
         </ul>
     </div>
+    {% endif %}
+  
 
   </div>
 {%endfor%}
 <script>
+    const jobs = JSON.parse('{{ json | tojson }}')
+    console.log(jobs)
   const buttonsOptions = document.querySelectorAll(".button_test")
   buttonsOptions.forEach(buttonOption =>{
     buttonOption.addEventListener("click",(e)=>{
