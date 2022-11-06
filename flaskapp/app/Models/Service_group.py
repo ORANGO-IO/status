@@ -9,9 +9,6 @@ class Service_group(db.Model):
     name = db.Column(db.String, unique=True, nullable=False)
     created_at = db.Column(db.DateTime(timezone=True),
                            server_default=func.now())
-    # services = db.relationship('Service',
-    #     backref=db.backref('service_group', lazy=True))
-
     def save(self):
         db.session.add(self)
         db.session.commit()

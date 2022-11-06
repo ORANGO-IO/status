@@ -10,7 +10,6 @@ job_record_controller = Job_record_controller()
 
 @app.route('/')
 def index():
-    ''' Aqui eu devo capturar os status e imagens '''
     return render_template('status.html', json=job_record_controller.all())
 
 
@@ -28,4 +27,4 @@ def details(service_id=None):
         return render_template('details.html', json=job_record_controller.get_job_records_by_service(service_id=service_id))
 
 
-app.register_blueprint(services_routes, url_prefix='/service')
+app.register_blueprint(services_routes, url_prefix='/api')

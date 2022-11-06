@@ -10,7 +10,6 @@ class Service_record_controller:
         jobs_filter_by_service = Job.query.join(Service).filter(Service.service_group_id == service_group_id).order_by(Job.order)
         jobs_records = []
         jobs_records_order_by_service = []
-        status = ''
         for job in jobs_filter_by_service:
             job_record =record_job(job)
             date_time_format = job_record.created_at.strftime('Última atualização %d de %B de %Y %H:%M')
@@ -23,7 +22,7 @@ class Service_record_controller:
             })
         for job_record in jobs_records:
             existService = False
-            for x,job_record_order_by_service in enumerate(jobs_records_order_by_service):
+            for job_record_order_by_service in jobs_records_order_by_service:
                 if job_record_order_by_service['id'] == job_record['service_id']:
                     if not job_record_order_by_service['status'] ==job_record['status']:
                          job_record_order_by_service['status'] = 'warning'
@@ -37,8 +36,5 @@ class Service_record_controller:
                 })
 
                     
-        print("jobs_records",jobs_records)
-        return jsonify(jobs_records=jobs_records_order_by_service
-            
-        )
+        return jsonify(jobs_records=jobs_records_order_by_service)
 

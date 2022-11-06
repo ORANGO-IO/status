@@ -46,7 +46,7 @@
       const status = document.getElementById(`${e.target.id}-status`)
       const container = document.getElementById(`${e.target.id}-container`)
       container.classList.add("loading")
-      fetch(`/service/verify_service/${e.target.id}`,{method:"POST"}).then(response =>{
+      fetch(`/api/verify_service/${e.target.id}`,{method:"POST"}).then(response =>{
         response.json().then(data=>{
           console.log("data",data)
           data.jobs_records.forEach(job_record =>{

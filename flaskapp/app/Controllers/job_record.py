@@ -9,7 +9,6 @@ from app.services.job_record import record_job
 class Job_record_controller:
     
     def create(self, job_id):
-        print('job_record')
         job = ''
         try:
             job = Job.find_by_id(job_id)
@@ -134,11 +133,6 @@ class Job_record_controller:
                         })
                     value = False
                 elif index == jobs_record_array.__len__():
-                    # if not index == 0:
-                    #     print("index",index)
-                    #     print("job_record",job_record.job.service.service_group.id)
-                    #     print("id",jobs_record_array[index]["id"])
-                    #     print(job_record.job.service.service_group.id == jobs_record_array[index]["id"])
                     if job_record.status.value == 'online':
                         count_online += 1
                     else:
