@@ -15,6 +15,9 @@ Entre no terminal do container do flaskapp e rode os seguintes comandos:
 python -m flask db migrate
 python -m flask db seed
 ```
+## Criando uma gravação de um job
+    Para criar uma gravação de um job, execute a rota api/job_record/<job_id> sendo o job_id o id de algum job
+    Ou entre na rota "/" e clique no botão testar de algum grupo de serviços
 
 ## Rodando docker no windows
 ```sh

@@ -57,6 +57,12 @@ def service():
 def get_job_record():
     return job_record_controller.all()
 
+@services_routes.route('/job_record/<job_id>',methods=['POST'])
+def job_record(job_id = None):
+    if type(int(job_id)) == int:
+        return job_record_controller.create(job_id)
+    return Response('{"error":"job_id not is integer"}', status=404, mimetype='application/json')
+
 @services_routes.route('/service_group', methods=['POST'])
 def service_group():
     req = request.get_json()
