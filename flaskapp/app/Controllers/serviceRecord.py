@@ -4,7 +4,7 @@ from flask import jsonify
 from app.Models.Service import Service
 from app.services.job_record_strategy import record_job_strategy
 
-class Service_record_controller:
+class ServiceRecordController:
     
     def create(self, service_group_id):
         jobs_filter_by_service = Job.query.join(Service).filter(Service.service_group_id == service_group_id).order_by(Job.order)
