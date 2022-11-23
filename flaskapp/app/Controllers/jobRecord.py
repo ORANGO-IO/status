@@ -8,7 +8,7 @@ from app.Models.ServiceGroup import ServiceGroup
 from app.Models.JopRecordStatus import JopRecordStatus
 from app.config.app import db
 from sqlalchemy import func,distinct
-class Job_record_controller:
+class JobRecordController:
     
     def create(self, job_id):
         job = ''

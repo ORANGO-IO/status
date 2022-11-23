@@ -2,10 +2,10 @@ from flask import render_template, jsonify
 
 from app.routes import services_routes
 from app.config.app import app, db
-from app.Controllers.job_record import Job_record_controller
+from app.Controllers.jobRecord import JobRecordController
 
 
-job_record_controller = Job_record_controller()
+job_record_controller = JobRecordController()
 
 
 @app.route('/')

@@ -5,7 +5,7 @@ from flask_expects_json import expects_json
 from app.validations.serviceSchema import serviceSchema
 from app.validations.jobSchema import jobSchema
 from app.Controllers.job import JobController
-from app.Controllers.job_record import Job_record_controller
+from app.Controllers.jobRecord import JobRecordController
 from app.Controllers.service_group import Service_Group_Controller
 from app.Controllers.service_record import Service_record_controller
 from app.Models.Job import Job
@@ -14,7 +14,7 @@ from app.Controllers.service_controller import Service_Controller
 # Loading parent folder
 sys.path.append('../app')
 
-job_record_controller = Job_record_controller()
+job_record_controller = JobRecordController()
 serviceController = Service_Controller()
 jobController = JobController()
 service_group_controller = Service_Group_Controller()
