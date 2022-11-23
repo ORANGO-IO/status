@@ -9,19 +9,18 @@ from app.Controllers.jobRecord import JobRecordController
 from app.Controllers.service_group import Service_Group_Controller
 from app.Controllers.service_record import Service_record_controller
 from app.Models.Job import Job
-from app.Controllers.service_controller import Service_Controller
+from app.Controllers.ServiceController import ServiceController
 
 # Loading parent folder
 sys.path.append('../app')
 
 job_record_controller = JobRecordController()
-serviceController = Service_Controller()
 jobController = JobController()
 service_group_controller = Service_Group_Controller()
 service_record_controller = Service_record_controller()
 services_routes = Blueprint('services_routes', __name__,
                             template_folder='templates',)
-service_controller = Service_Controller()
+service_controller = ServiceController()
 
 @services_routes.route('/job', methods=['POST', 'GET'])
 @expects_json(jobSchema, ignore_for=['GET'])

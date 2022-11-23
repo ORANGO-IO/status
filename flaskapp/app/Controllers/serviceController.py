@@ -2,7 +2,7 @@ from app.Models.Service import Service
 from app.Models.ServiceGroup import ServiceGroup
 from flask import Response
 
-class Service_Controller:
+class ServiceController:
     def create(self,name,service_group_id):
         try:
             if ServiceGroup.find_by_id(service_group_id) is None:
