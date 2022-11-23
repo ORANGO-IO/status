@@ -15,7 +15,7 @@ from app.Controllers.ServiceController import ServiceController
 sys.path.append('../app')
 
 job_record_controller = JobRecordController()
-jobController = JobController()
+job_controller = JobController()
 service_group_controller = ServiceGroupController()
 service_record_controller = ServiceRecordController()
 services_routes = Blueprint('services_routes', __name__,
@@ -27,8 +27,8 @@ service_controller = ServiceController()
 def job():
     if request.method == 'POST':
         req = request.get_json()
-        return jobController.create(req.get('order'), req.get('url'), req.get('action'), req.get('actionValue'), req.get('serviceId'),req.get('description'))
-    return jobController.all()
+        return job_controller.create(req.get('order'), req.get('url'), req.get('action'), req.get('actionValue'), req.get('serviceId'),req.get('description'))
+    return job_controller.all()
 
 @services_routes.route('/execute_all_jobs')
 def executeTestAllJobs():
