@@ -4,7 +4,7 @@ from app.Models.Job import Job
 from flask import jsonify, Response
 from app.Models.Service import Service
 from app.services.job_record_strategy import record_job_strategy
-from app.Models.Service_group import Service_group
+from app.Models.ServiceGroup import ServiceGroup
 from app.Models.JopRecordStatus import JopRecordStatus
 from app.config.app import db
 from sqlalchemy import func,distinct
@@ -54,7 +54,7 @@ class Job_record_controller:
 
     def all(self):
         print("==================== CAPTURANDO TODOS OS JOB RECORDS ====================")
-        jobs_records_by_service_group = Service_group.query.outerjoin(Service).outerjoin(Job).outerjoin(JobRecord).outerjoin(JopRecordStatus).all()
+        jobs_records_by_service_group = ServiceGroup.query.outerjoin(Service).outerjoin(Job).outerjoin(JobRecord).outerjoin(JopRecordStatus).all()
 
         jobs_record_array =[]
         

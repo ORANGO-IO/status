@@ -1,11 +1,11 @@
 from app.Models.Service import Service
-from app.Models.Service_group import Service_group
+from app.Models.ServiceGroup import ServiceGroup
 from flask import Response
 
 class Service_Controller:
     def create(self,name,service_group_id):
         try:
-            if Service_group.find_by_id(service_group_id) is None:
+            if ServiceGroup.find_by_id(service_group_id) is None:
                 return Response('{"error":"service_group not exist"}', status=400, mimetype='application/json')
             if not Service.find_by_name(name.upper(),service_group_id) is None:
                 return Response('{"error":"service already exist"}', status=400, mimetype='application/json')
