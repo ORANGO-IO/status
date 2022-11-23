@@ -17,7 +17,7 @@ class ServiceGroup(db.Model):
         
     @classmethod
     def find_by_name(cls, name):
-        return ServiceGroup.query.filter(ServiceGroup.name == name).first()
+        return ServiceGroup.query.filter(ServiceGroup.name.ilike(name)).first()
     
     @classmethod
     def find_by_id(cls,id):

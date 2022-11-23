@@ -12,7 +12,7 @@ class Service(db.Model):
         'service_groups.id'), nullable=True)
     created_at = db.Column(db.DateTime(timezone=True),
                            server_default=func.now())
-    service_group = db.relationship('Service_group',
+    service_group = db.relationship('ServiceGroup',
         backref=db.backref('services', lazy=True))
     
     # jobs = db.relationship('Job',
