@@ -39,12 +39,12 @@ def executeTestAllJobs():
         array_response.append(response)
     return Response(status=201)
 
-@services_routes.route('/verify_service/<service_id>', methods=['POST'])
-def create_job_record(service_id=None):
-    if type(int(service_id)) == int:
-        response = service_record_controller.create(service_id)
+@services_routes.route('/verify_service/<service_group_id>', methods=['POST'])
+def create_job_record(service_group_id=None):
+    if type(int(service_group_id)) == int:
+        response = service_record_controller.create(service_group_id)
         return response
-    return Response('{"error":"service_id not is integer"}', status=404, mimetype='application/json')
+    return Response('{"error":"service_group_id not is integer"}', status=404, mimetype='application/json')
 
 @services_routes.route("/service",methods=['POST'])
 @expects_json(service_schema)

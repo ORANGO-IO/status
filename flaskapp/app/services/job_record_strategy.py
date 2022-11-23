@@ -23,13 +23,7 @@ def record_job_default_strategy(job):
             'status_id': getstatus.id,
             'time_spent_in_sec': finishedTime - initialTime,
         }).save()
-        return jsonify(
-            id=job_record.id,
-            time_spent_in_sec=job_record.time_spent_in_sec,
-            service_id=job_record.id,
-            status_id=job_record.status_id,
-            createdAt=job_record.created_at
-        )
+        return job_record
     else:
         finishedTime = time.time()
         getstatus = JopRecordStatus.find_by_name('offline')
