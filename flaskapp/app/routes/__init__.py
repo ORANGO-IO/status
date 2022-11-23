@@ -2,7 +2,7 @@
 from flask import Blueprint, request, Response
 import sys
 from flask_expects_json import expects_json
-from app.validations.serviceSchema import serviceSchema
+from app.validations.service_schema import service_schema
 from app.validations.jobSchema import jobSchema
 from app.Controllers.job import JobController
 from app.Controllers.jobRecord import JobRecordController
@@ -47,7 +47,7 @@ def create_job_record(service_id=None):
     return Response('{"error":"service_id not is integer"}', status=404, mimetype='application/json')
 
 @services_routes.route("/service",methods=['POST'])
-@expects_json(serviceSchema)
+@expects_json(service_schema)
 def service():
     req = request.get_json()
     return service_controller.create(req.get("name"),req.get("service_group_id"))
