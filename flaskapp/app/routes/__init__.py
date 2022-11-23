@@ -3,7 +3,7 @@ from flask import Blueprint, request, Response
 import sys
 from flask_expects_json import expects_json
 from app.validations.service_schema import service_schema
-from app.validations.jobSchema import jobSchema
+from app.validations.job_schema import job_schema
 from app.Controllers.job import JobController
 from app.Controllers.jobRecord import JobRecordController
 from app.Controllers.ServiceGroupController import ServiceGroupController
@@ -23,7 +23,7 @@ services_routes = Blueprint('services_routes', __name__,
 service_controller = ServiceController()
 
 @services_routes.route('/job', methods=['POST', 'GET'])
-@expects_json(jobSchema, ignore_for=['GET'])
+@expects_json(job_schema, ignore_for=['GET'])
 def job():
     if request.method == 'POST':
         req = request.get_json()

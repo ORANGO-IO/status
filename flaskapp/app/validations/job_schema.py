@@ -1,4 +1,4 @@
-jobSchema = {
+job_schema = {
    'type': 'object',
    'properties': {
         'order': {'type': 'integer'},
