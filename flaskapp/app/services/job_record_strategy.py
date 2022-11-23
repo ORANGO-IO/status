@@ -1,4 +1,4 @@
-from app.functions import functions
+from app.services.job_record_functions import job_record_functions
 from app.Models.Job import Job
 from datetime import datetime
 import time
@@ -14,7 +14,7 @@ from flask import jsonify
 def record_job_default_strategy(job):
     initialTime = 0
     initialTime = time.time()        
-    response = functions[job.action](job.url)
+    response = job_record_functions[job.action](job.url)
     if response:
         finishedTime = time.time()
         getstatus = JopRecordStatus.find_by_name('online')
