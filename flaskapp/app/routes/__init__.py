@@ -4,10 +4,10 @@ import sys
 from flask_expects_json import expects_json
 from app.validations.service_schema import service_schema
 from app.validations.job_schema import job_schema
-from app.Controllers.job import JobController
-from app.Controllers.jobRecord import JobRecordController
+from app.Controllers.Job import JobController
+from app.Controllers.JobRecord import JobRecordController
 from app.Controllers.ServiceGroupController import ServiceGroupController
-from app.Controllers.serviceRecord import ServiceRecordController
+from app.Controllers.ServiceRecord import ServiceRecordController
 from app.Models.Job import Job
 from app.Controllers.ServiceController import ServiceController
 
