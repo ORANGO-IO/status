@@ -6,7 +6,7 @@ from app.validations.serviceSchema import serviceSchema
 from app.validations.jobSchema import jobSchema
 from app.Controllers.job import JobController
 from app.Controllers.jobRecord import JobRecordController
-from app.Controllers.service_group import Service_Group_Controller
+from app.Controllers.ServiceGroupController import ServiceGroupController
 from app.Controllers.service_record import Service_record_controller
 from app.Models.Job import Job
 from app.Controllers.ServiceController import ServiceController
@@ -16,7 +16,7 @@ sys.path.append('../app')
 
 job_record_controller = JobRecordController()
 jobController = JobController()
-service_group_controller = Service_Group_Controller()
+service_group_controller = ServiceGroupController()
 service_record_controller = Service_record_controller()
 services_routes = Blueprint('services_routes', __name__,
                             template_folder='templates',)

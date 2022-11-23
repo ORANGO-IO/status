@@ -1,7 +1,7 @@
 from app.Models.ServiceGroup import ServiceGroup
 from flask import jsonify,Response
 
-class Service_Group_Controller:
+class ServiceGroupController:
     def create(self,name):
         try:
             if not ServiceGroup.find_by_name(name.upper()) is None:
