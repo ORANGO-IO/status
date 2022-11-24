@@ -14,5 +14,16 @@ class ServiceGroupController:
             )
         except:
             return Response('{"error":"server error"}', status=500, mimetype='application/json')
-
-        
+    def all(self):
+        try:
+            services = ServiceGroup.query.all()
+            servicesArray = []
+            for service in services:
+                servicesArray.append({
+                "id":service.id,
+                "name":service.name,
+                "created_at":service.created_at
+                })
+            return jsonify(servicesArray)
+        except:
+            return Response('{"error":"server error"}', status=500, mimetype='application/json')
