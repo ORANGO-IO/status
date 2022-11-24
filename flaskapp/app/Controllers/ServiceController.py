@@ -1,6 +1,6 @@
 from app.Models.Service import Service
 from app.Models.ServiceGroup import ServiceGroup
-from flask import Response
+from flask import Response,jsonify
 
 class ServiceController:
     def create(self,name,service_group_id):
@@ -12,4 +12,18 @@ class ServiceController:
             Service(**{"name":name.upper(),"service_group_id":service_group_id}).save()
             return Response(status=201)     
         except: 
+            return Response('{"error":"server error"}', status=500, mimetype='application/json')
+    def all(self):
+        try:
+            services = Service.query.all()
+            servicesArray = []
+            for service in services:
+                servicesArray.append({
+                "id":service.id,
+                "name":service.name,
+                "service_group_id":service.service_group_id,
+                "created_at":service.created_at
+                })
+            return jsonify(servicesArray)
+        except:
             return Response('{"error":"server error"}', status=500, mimetype='application/json')
