@@ -37,3 +37,29 @@ docker-compose -f docker-compose.windows.yml up
 docker-compose down --remove-orphans --volumes
 docker-compose up --build
 ```
+
+### Como criar um job
+Para criar o job,precisa ter cadastrado um grupo de serviços e um serviço
+
+- Para criar um grupo de serviços,use a rota /api/service_group passando o parametro name com o nome do grupo de serviço no seguinte formato:
+    {
+        "name":string
+    }
+- Para criar um serviço,precisa passar o id do grupo de serviços e o nome do serviço como parametro no seguinte formato:
+    {
+	    "name":string,
+	    "service_group_id":int
+    }
+
+- Para criar um job,precisa passar os seguintes campos para o backend
+    {
+        "order":int,		     
+        "url":string,
+        "action":string,
+        "actionValue":string,
+        "serviceId":int,
+        "description":string
+    }
+
+o parametro action será o tipo de ação que ele executará
+o parametro actionValue servirá apenas quando o parametro action for XPATH,se não, pode ser vazio
