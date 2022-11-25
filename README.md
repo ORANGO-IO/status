@@ -12,6 +12,7 @@ docker-compose logs -f
 Entre no terminal do container do flaskapp e rode os seguintes comandos:
 
 ```sh
+docker exec -it status_flaskapp bash
 python -m flask db migrate
 python -m flask db seed
 ```
