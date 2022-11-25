@@ -3,11 +3,10 @@
 # Example:
 from flask import current_app
 from app.Models.JopRecordStatus import JopRecordStatus
-from app.Models.Service_group import Service_group
+from app.Models.ServiceGroup import Service_group
 from app.Models.Service import Service
 from app.Models.Job import Job
-from app.Models.JobRecord import JobRecord
-# from app.services.db import db
+
 app_config = current_app.config
 
 print("run seeds")
@@ -262,9 +261,4 @@ for x in service:
 print("seed job")
 for x in job:
     Job(**x).save()
-# Service_group(**service_group).save()
-# Service(**service).save()
-# Job(**job).save()
-# JobRecord(**jobRecord).save()
-# JobRecord(**jobRecord).save()
 print("finished seeds")

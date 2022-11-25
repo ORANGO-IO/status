@@ -4,9 +4,11 @@ from app.Models.Job import Job
 from flask import jsonify, Response
 from app.Models.Service import Service
 from app.services.job_record_strategy import record_job_strategy
-from app.Models.Service_group import Service_group
+from app.Models.ServiceGroup import ServiceGroup
 from app.Models.JopRecordStatus import JopRecordStatus
-class Job_record_controller:
+from app.config.app import db
+from sqlalchemy import func,distinct
+class JobRecordController:
     
     def create(self, job_id):
         job = ''
@@ -52,7 +54,7 @@ class Job_record_controller:
 
     def all(self):
         print("==================== CAPTURANDO TODOS OS JOB RECORDS ====================")
-        jobs_records_by_service_group = Service_group.query.outerjoin(Service).outerjoin(Job).outerjoin(JobRecord).outerjoin(JopRecordStatus).all()
+        jobs_records_by_service_group = ServiceGroup.query.outerjoin(Service).outerjoin(Job).outerjoin(JobRecord).outerjoin(JopRecordStatus).all()
 
         jobs_record_array =[]
         
@@ -78,7 +80,8 @@ class Job_record_controller:
                     if hasattr(service,"jobs"):
                         for job in service.jobs:
                             if hasattr(job,"job_record"):
-                                for job_record_by_service in job.job_record:
+                                if job.job_record.__len__() > 0:
+                                    job_record_by_service = job.job_record[job.job_record.__len__()-1]
                                     service_object["last_updated"] = job_record_by_service.created_at
                                     date_time_format = job_record.created_at.strftime('Última atualização %d de %B de %Y %H:%M')
                                     service_object["date_time_format"] = date_time_format

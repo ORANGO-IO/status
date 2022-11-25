@@ -1,4 +1,4 @@
-serviceSchema = {
+service_schema = {
    'type': 'object',
    'properties': {
         'name': {'type': 'string'},

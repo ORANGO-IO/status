@@ -2,7 +2,7 @@ from app.config.app import db
 
 from sqlalchemy.sql import func
 
-class Service_group(db.Model):
+class ServiceGroup(db.Model):
     __tablename__ = 'service_groups'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -17,8 +17,8 @@ class Service_group(db.Model):
         
     @classmethod
     def find_by_name(cls, name):
-        return Service_group.query.filter(Service_group.name == name).first()
+        return ServiceGroup.query.filter(ServiceGroup.name.ilike(name)).first()
     
     @classmethod
     def find_by_id(cls,id):
-        return Service_group.query.get(id)
+        return ServiceGroup.query.get(id)
