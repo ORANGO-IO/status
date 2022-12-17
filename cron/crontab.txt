@@ -1,4 +1,4 @@
 # m h dom mon dow user  command
-* * * * * /script.sh >> /var/log/script.log
-* * * * * wget -O - http://flaskapp:5000/api/execute_all_jobs > /dev/null 2>&1
+30 * * * * /script.sh >> /var/log/script.log
+30 * * * * wget -O - http://flaskapp:5000/api/execute_all_jobs > /dev/null 2>&1
     
