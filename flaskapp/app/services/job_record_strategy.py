@@ -52,6 +52,7 @@ def record_job_xpath_strategy(job):
             'job_id': job.id,
             'status_id': getstatus.id,
             'time_spent_in_sec': finishedTime - initialTime,
+            'created_at':datetime.now()
         }).save()
         image = {
             "url": image_path,
@@ -69,6 +70,7 @@ def record_job_xpath_strategy(job):
             'job_id': job.id,
             'status_id': getstatus.id,
             'time_spent_in_sec': finishedTime - initialTime,
+            'created_at':datetime.now()
         }).save()
         return job_record
 

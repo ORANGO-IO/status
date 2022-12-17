@@ -69,6 +69,7 @@ class JobRecordController:
                 "if_not_exist_services":"Sem serviços cadastrados para verificação"
             }     
             if hasattr(job_record,"services"):
+                date = None
                 for service in job_record.services:
                     service_object ={
                         "id":service.id,
@@ -83,7 +84,7 @@ class JobRecordController:
                                 if job.job_record.__len__() > 0:
                                     job_record_by_service = job.job_record[job.job_record.__len__()-1]
                                     service_object["last_updated"] = job_record_by_service.created_at
-                                    date_time_format = job_record.created_at.strftime('Última atualização %d de %B de %Y %H:%M')
+                                    date_time_format = job_record_by_service.created_at.strftime('Última atualização %d de %B de %Y %H:%M')
                                     service_object["date_time_format"] = date_time_format
                                     if job_record_by_service.status.value == 'online':  
                                         count_online +=1
