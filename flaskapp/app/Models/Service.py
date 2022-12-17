@@ -1,7 +1,7 @@
 from app.config.app import db
 
 from sqlalchemy.sql import func
-
+from app.Models.ServiceGroup import ServiceGroup
 
 class Service(db.Model):
     __tablename__ = 'services'
@@ -27,7 +27,7 @@ class Service(db.Model):
 
     @classmethod
     def find_by_name(cls, name,id):
-        return Service.query.filter(Service.name == name,Service.service_group_id == id).first()
+        return Service.query.filter(Service.name == name,Service.service_group_id == id).join(ServiceGroup).first()
 
     @classmethod
     def find_by_id(cls, id):

@@ -50,7 +50,7 @@ class JobRecordController:
             }
             jobs_records.append(current_job_record)
         
-        return {"jobs_records":jobs_records,"name":service.name}
+        return {"jobs_records":jobs_records,"name":service.name,"group":service.service_group.name}
 
     def all(self):
         print("==================== CAPTURANDO TODOS OS JOB RECORDS ====================")
