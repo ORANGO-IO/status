@@ -3,7 +3,7 @@
 # Example:
 from flask import current_app
 from app.Models.JopRecordStatus import JopRecordStatus
-from app.Models.ServiceGroup import Service_group
+from app.Models.ServiceGroup import ServiceGroup
 from app.Models.Service import Service
 from app.Models.Job import Job
 
@@ -224,7 +224,7 @@ job = [{
     "order": 1,
     "url": "https://filipelopes.me/",
     "action": "XPATH",
-    "action_value": "//header/nav/div/a@[href='#me']",
+    "action_value": "//*[@id='root']/main/header/nav/div[1]/a[1]",
     "service_id": 17,
     'description': "descrição"
 },
@@ -252,8 +252,8 @@ for x in initialStatus:
         JopRecordStatus(**x).save()
 print("seed service_group")
 for x in service_group:
-    if Service_group.find_by_name(x['name']) is None:
-        Service_group(**x).save()
+    if ServiceGroup.find_by_name(x['name']) is None:
+        ServiceGroup(**x).save()
 print("seed service")
 for x in service:
     if Service.find_by_name(x['name'], x['service_group_id']) is None:
