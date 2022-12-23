@@ -12,3 +12,4 @@ Pillow==8.3.2
 flask-expects-json==1.7.0
 flask_scss===0.5
 psycopg2-binary===2.9.5
+flask-paginate===2022.1.8

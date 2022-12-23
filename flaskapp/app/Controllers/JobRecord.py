@@ -8,6 +8,8 @@ from app.Models.ServiceGroup import ServiceGroup
 from app.Models.JopRecordStatus import JopRecordStatus
 from app.config.app import db
 from sqlalchemy import func,distinct
+from app.Models.Screenshot import Screenshot
+
 class JobRecordController:
     
     def create(self, job_id):
@@ -27,11 +29,13 @@ class JobRecordController:
                 createdAt=job_record.created_at
             )
 
-    def get_job_records_by_service(self,service_id):
-        jobs_records_response = JobRecord.query.join(Job).filter(Job.service_id == service_id ).order_by(JobRecord.created_at.desc())
+    def get_job_records_by_service(self,service_id,page):
+        jobs_records_response = JobRecord.query.join(Job).outerjoin(Screenshot).filter(Job.service_id == service_id ).order_by(JobRecord.created_at.desc()).paginate(page=page,per_page=10)
         service = Service.find_by_id(service_id)
         jobs_records = []
-        for job_record in jobs_records_response:
+        print("jobs_records_response")
+        print(jobs_records_response)
+        for job_record in jobs_records_response.items:
             date_time_format = job_record.created_at.strftime('Verificado em %d de %B de %Y %H:%M')
             current_job_record = {
                 'id': job_record.id,
@@ -48,9 +52,12 @@ class JobRecordController:
                 },
                 'created_at':job_record.created_at
             }
+            if not job_record.screenshots.__len__() == 0:
+                current_job_record['image']= job_record.screenshots[0].url
+            
             jobs_records.append(current_job_record)
         
-        return {"jobs_records":jobs_records,"name":service.name,"group":service.service_group.name}
+        return {"jobs_records":jobs_records,"name":service.name,"group":service.service_group.name,'count':JobRecord.query.join(Job).filter(Job.service_id == service_id ).count()}
 
     def all(self):
         print("==================== CAPTURANDO TODOS OS JOB RECORDS ====================")
