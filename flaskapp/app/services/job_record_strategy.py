@@ -46,7 +46,7 @@ def record_job_xpath_strategy(job):
         initialTime = time.time()
 
         driver.get(f'{job.url}')
-        time.sleep(5)
+        time.sleep(10)
         driver.get_screenshot_as_file(image_path_save)
         convert_compress(image_path_save)
         driver.find_element(By.XPATH, job.action_value).is_displayed()
