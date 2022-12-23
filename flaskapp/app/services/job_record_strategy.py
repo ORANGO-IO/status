@@ -10,6 +10,7 @@ from app.Models.JopRecordStatus import JopRecordStatus
 from selenium.webdriver.common.by import By
 from app.Models.JobRecord import JobRecord
 from flask import jsonify
+import re
 
 def record_job_default_strategy(job):
     initialTime = 0
@@ -37,14 +38,17 @@ def record_job_default_strategy(job):
 def record_job_xpath_strategy(job):
     initialTime = 0
     try:
-        image_name = f'{job.service.service_group.name}_{job.service.name}_{datetime.now().strftime("%Y_%m_%d__%H_%M_%S")}'
-        image_path = f"{ROOT_PATH}/image_records/{image_name}.png"
+        service_group_name_whitout_spaec = re.sub(' +', ' ', job.service.service_group.name)
+        service_name_whitout_spaec = re.sub(' +', ' ', job.service.name)
+        image_name = f'{service_group_name_whitout_spaec}_{service_name_whitout_spaec}_{datetime.now().strftime("%Y_%m_%d_%H_%M_%S")}'
+        image_path_save = f"{ROOT_PATH}/static/image_records/{image_name}.png"
+        image_path = f"static/image_records/{image_name}.jpg"
         initialTime = time.time()
 
         driver.get(f'{job.url}')
-        time.sleep(5)
-        driver.get_screenshot_as_file(image_path)
-        convert_compress(image_path)
+        time.sleep(10)
+        driver.get_screenshot_as_file(image_path_save)
+        convert_compress(image_path_save)
         driver.find_element(By.XPATH, job.action_value).is_displayed()
         finishedTime = time.time()
         getstatus = JopRecordStatus.find_by_name('online')
@@ -56,7 +60,7 @@ def record_job_xpath_strategy(job):
         }).save()
         image = {
             "url": image_path,
-            "mime_type": "images/png",
+            "mime_type": "images/jpg",
             "job_record_id": job_record.id
         }
         Screenshot(**image).save()

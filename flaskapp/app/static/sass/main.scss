@@ -100,7 +100,17 @@ main {
 
       ul{
         list-style:none;
-        li > .option{
+        li {
+          
+          border-bottom: 1px solid #000;
+          padding-bottom: 8px;
+          display:flex;
+          flex-direction: column;
+          align-items: center;
+          img{
+            margin-bottom:1rem;
+          }
+          > .option{
           cursor: pointer;
           display: flex;
           margin-top: 8px;
@@ -184,7 +194,7 @@ main {
               opacity: 1;
             }
           }
-        }
+        }}
 
       }
     }
@@ -224,5 +234,34 @@ main {
     .off {
       color: #d22020;
     }
+  }
+}
+
+.pagination-page-info {
+  padding: .6em;
+  padding-left: 0;
+  width: 40em;
+  margin: .5em;
+  margin-left: 0;
+  font-size: 12px;
+}
+.pagination-page-info b {
+  color: black;
+  background: #6aa6ed;
+  padding-left: 2px;
+  padding: .1em .25em;
+  font-size: 150%;
+}
+
+.pagination  {
+  display:flex;
+
+  li{
+    color: black;
+  background: #6aa6ed;
+  padding-left: 2px;
+  padding: .1em .25em;
+  font-size: 150%;
+  color:#fff;
   }
 }

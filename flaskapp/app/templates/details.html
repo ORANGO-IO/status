@@ -10,15 +10,16 @@
    
 {% endblock %}
 {% block content %}
-
 <div>
   <h2>Histórico de Status</h2>
+  {{ pagination.links }}
   <ul>
+    
     {% for i in json.jobs_records %}
     <li>
+      <img src=../{{i.image}}/>
       <div class="option">
         <button class="button_option" id={{i.id}} type="button">
-    
         <span class={{i.status}}></span>
         <p>{{i.job.description}}</p>
         <em>{{i.date_time_format}}</em>
@@ -28,13 +29,17 @@
       </div>
       </li>
     {%endfor%}
-
-
+    
+    
   </ul>
+  {{ pagination.links }}
 
 </div>
+<script>
 
-
+  const jobs = JSON.parse('{{ json | tojson }}')
+  console.log("values",jobs)
+</script>
 <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 

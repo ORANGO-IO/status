@@ -11,6 +11,7 @@ class Screenshot(db.Model):
     job_record_id = db.Column(db.Integer,db.ForeignKey('job_records.id'),nullable=True)
     created_at = db.Column(db.DateTime(timezone=True),
                            server_default=func.now())
+    job_records = db.relationship('JobRecord',backref=db.backref('screenshots',lazy=True))
     def save(self):
         db.session.add(self)
         db.session.commit()
