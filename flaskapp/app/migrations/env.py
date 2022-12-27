@@ -3,26 +3,7 @@ from logging.config import fileConfig
 from alembic import context
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-# from flask_migrate import Migrate
-import os
-
-
-
-# app = current_app
-app = Flask(__name__,template_folder='../templates',static_folder='../static')
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///app/services/sqlite3.db"
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["FLASK_DB_SEEDS_PATH"] = "app/migrations/seeds.py"
-# migrate = Migrate(app=app,db=db,directory="app/migrations")
-# There's no access to current_app here so we must create our own app.
-print("tstando")
-SQLAlchemy(app)
-db_uri = app.config["SQLALCHEMY_DATABASE_URI"]
-db = app.extensions["sqlalchemy"].db
-# db = app.extensions["sqlalchemy"].db
-
+db_uri = "sqlite:///app/services/sqlite3.db"
 # Provide access to the values within alembic.ini.
 config = context.config
 
@@ -31,7 +12,7 @@ fileConfig(config.config_file_name)
 
 # Sets up metadata for autogenerate support,
 config.set_main_option("sqlalchemy.url", db_uri)
-target_metadata = db.metadata
+target_metadata = None
 
 # Configure anything else you deem important, example:
 # my_important_option = config.get_main_option("my_important_option")
