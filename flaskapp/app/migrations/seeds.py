@@ -162,7 +162,7 @@ job = [{
     "action": "XPATH",
     "action_value": "//div[@class='header']/img[@alt='logo']",
     "service_id": 1,
-    'description': "descrição"
+    'description': "Verificando logo do site"
 },
     {
     "order": 2,
@@ -170,7 +170,7 @@ job = [{
     "action": "XPATH",
     "action_value": "//section[@class='wrapper']/h1/img[@class='logo']",
     "service_id": 5,
-    'description': "descrição"
+    'description': "Verificando logo do site"
 },
     {
     "order": 3,
@@ -178,7 +178,7 @@ job = [{
     "action": "XPATH",
     "action_value": "//*[@id='app']/div/div[3]/div/div[2]/section[1]/img",
     "service_id": 5,
-    'description': "descrição"
+    'description': "Verificando logo do site"
 },
     {
     "order": 1,
@@ -186,7 +186,7 @@ job = [{
     "action": "XPATH",
     "action_value": "//div[@id='intro-logo']/img",
     "service_id": 10,
-    'description': "descrição"
+    'description': "Verificando logo do site"
 },
     {
     "order": 2,
@@ -194,7 +194,7 @@ job = [{
     "action": "XPATH",
     "action_value": "//header[@id='mainheader']/img[@id='mainlogo']",
     "service_id": 9,
-    'description': "descrição"
+    'description': "Verificando logo do site"
 },
     {
     "order": 2,
@@ -202,7 +202,7 @@ job = [{
     "action": "XPATH",
     "action_value": "//header/img[@alt='lines']",
     "service_id": 11,
-    'description': "descrição"
+    'description': "Verificando header"
 },
     {
     "order": 1,
@@ -210,7 +210,7 @@ job = [{
     "action": "status",
     "action_value": "",
     "service_id": 12,
-    'description': "descrição"
+    'description': "Verificando status da api"
 },
     {
     "order": 1,
@@ -218,7 +218,7 @@ job = [{
     "action": "status",
     "action_value": "alembic_version",
     "service_id": 16,
-    'description': "descrição"
+    'description': "Verificando alembic_version da api"
 },
     {
     "order": 1,
@@ -226,7 +226,7 @@ job = [{
     "action": "XPATH",
     "action_value": "//*[@id='root']/main/header/nav/div[1]/a[1]",
     "service_id": 17,
-    'description': "descrição"
+    'description': "Verificando link do site"
 },
     {
     "order": 1,
@@ -234,7 +234,7 @@ job = [{
     "action": "XPATH",
     "action_value": "//*[@id='root']/div/header/nav/button[@class='menuToogle']",
     "service_id": 21,
-    'description': "descrição"
+    'description': "Verificando menu do site"
 },
     {
     "order": 1,
@@ -242,7 +242,7 @@ job = [{
     "action": "XPATH",
     "action_value": "//div[@class='header']/img[@class='logo']",
     "service_id": 2,
-    'description': "descrição"
+    'description': "Verificando logo do site"
 },
 ]
 
