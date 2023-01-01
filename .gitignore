@@ -1,5 +1,6 @@
 __pycache__
 flaskapp/app/image_records/*.jpg
+flaskapp/app/static/image_records/*.jpg
 *.css
 *.css.map
 sqlite3.db
