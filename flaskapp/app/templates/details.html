@@ -17,8 +17,8 @@
     
     {% for i in json.jobs_records %}
     <li>
-      <img src=../{{i.image}}/>
       <div class="option">
+        <img src=../{{i.image}} class="coupontooltip"/>
         <button class="button_option" id={{i.id}} type="button">
         <span class={{i.status}}></span>
         <p>{{i.job.description}}</p>
@@ -36,9 +36,16 @@
 
 </div>
 <script>
+var tooltip = document.querySelectorAll('.coupontooltip');
 
-  const jobs = JSON.parse('{{ json | tojson }}')
-  console.log("values",jobs)
+document.addEventListener('mousemove', fn, false);
+
+function fn(e) {
+    for (var i=tooltip.length; i--;) {
+        tooltip[i].style.left = e.pageX + 'px';
+        tooltip[i].style.top = e.pageY + 'px';
+    }
+}
 </script>
 <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
