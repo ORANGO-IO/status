@@ -5,9 +5,7 @@ Flask-Alembic==2.0.1
 Flask-SQLAlchemy==2.5.1
 Flask-CLI==0.4.0
 Flask-DB==0.2.0
-# Flask-Migrate==3.1.0
-# rpa==1.45.0
-selenium==3.141.0
+selenium==4.7.2
 Pillow==8.3.2
 flask-expects-json==1.7.0
 flask_scss===0.5
