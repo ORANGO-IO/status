@@ -6,7 +6,7 @@ import os
 
 load_dotenv()
 app = Flask(__name__,template_folder='../templates',static_folder='../static')
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DB_URL_CONFIG")
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DB_URL")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ECHO"] = False
 app.config["FLASK_DB_SEEDS_PATH"] = "app/migrations/seeds.py"
