@@ -279,11 +279,11 @@ main {
   display: flex;
 
   li {
-    color: black;
-    background: #6aa6ed;
     padding-left: 2px;
     padding: 0.1em 0.25em;
-    font-size: 150%;
-    color: #fff;
+    a{
+      color: #646464;
+
+    }
   }
 }
