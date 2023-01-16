@@ -14,7 +14,7 @@ cap = DesiredCapabilities().FIREFOX
 cap["marionette"] = True
 
 driver = webdriver.Firefox(
-    firefox_options=options, capabilities=cap, executable_path="/usr/local/bin/geckodriver")
+    options=options, capabilities=cap, executable_path="/usr/local/bin/geckodriver")
 print('Acessando a página', flush=True)
 
 wait = WebDriverWait(driver, 10)
