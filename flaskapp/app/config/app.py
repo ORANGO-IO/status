@@ -1,10 +1,8 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_scss import Scss
-from dotenv import load_dotenv
 import os
 
-load_dotenv()
 app = Flask(__name__,template_folder='../templates',static_folder='../static')
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DB_URL")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False

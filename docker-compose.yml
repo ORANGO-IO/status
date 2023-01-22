@@ -12,6 +12,9 @@ services:
       - ./flaskapp:/app
     ports:
       - "${FLASKAPP_PORT}:5000"
+    environment:
+      - DB_URL=${DB_URL}
+      - TIMEZONE=${TIMEZONE}
   cron:
     container_name: status_cron
     restart: always

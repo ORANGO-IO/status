@@ -3,9 +3,7 @@ from logging.config import fileConfig
 from alembic import context
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
-from dotenv import load_dotenv
 import os
-load_dotenv()
 
 db_uri = os.getenv("DB_URL")
 # Provide access to the values within alembic.ini.
