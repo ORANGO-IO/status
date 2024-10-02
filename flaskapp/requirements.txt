@@ -1,8 +1,9 @@
-flask==2.0.1
+flask==2.2.0
+Werkzeug==2.2.2
 requests==2.26.0
 beautifulsoup4==4.10.0
 Flask-Alembic==2.0.1
-Flask-SQLAlchemy==2.5.1
+Flask-SQLAlchemy==3.0.3
 Flask-CLI==0.4.0
 Flask-DB==0.2.0
 selenium==4.7.2
