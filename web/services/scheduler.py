@@ -3,8 +3,7 @@ from web import db
 from web.models import Task, TaskResult
 from datetime import datetime, timezone
 
-def process_crawler(task):
-    # Lógica para verificar se o site está online (exemplo básico)
+def process_crawler(task, commit=True):
     import requests
     try:
         response = requests.get(task.config.get("url"), timeout=5)
@@ -14,10 +13,12 @@ def process_crawler(task):
         status = "error"
         output = str(e)
 
-    save_task_result(task, status, output)
+    if commit:
+        save_task_result(task, status, output)
+    return status, output
 
-def process_request(task):
-    # Lógica para verificar se API está respondendo corretamente
+
+def process_request(task, commit=True):
     import requests
     try:
         response = requests.request(
@@ -32,13 +33,19 @@ def process_request(task):
         status = "error"
         output = str(e)
 
-    save_task_result(task, status, output)
+    if commit:
+        save_task_result(task, status, output)
+    return status, output
 
-def process_capture(task):
-    # Lógica de captura de string (ex: versão via XPath, não implementado aqui)
-    status = "success"
-    output = "simulated-capture-result"
-    save_task_result(task, status, output)
+
+def process_capture(task, commit=True):
+    from web.services.run_playwright_script import run_playwright_script
+    status, output = run_playwright_script(task.config)
+
+    if commit:
+        save_task_result(task, status, output)
+    return status, output
+
 
 def save_task_result(task, status, output):
     now = datetime.now(timezone.utc)
@@ -56,6 +63,7 @@ def save_task_result(task, status, output):
     db.session.add(result)
     db.session.commit()
 
+
 def run_task_batch(task_type):
     print(f"Executando tasks do tipo: {task_type}")
     tasks = Task.query.filter_by(type=task_type, active=True).all()
@@ -67,10 +75,13 @@ def run_task_batch(task_type):
         elif task_type == "capture":
             process_capture(task)
 
+
 def start_scheduler():
     scheduler = BackgroundScheduler()
-    scheduler.add_job(lambda: run_task_batch("crawler"), "interval", seconds=60)
-    scheduler.add_job(lambda: run_task_batch("request"), "interval", seconds=90)
-    scheduler.add_job(lambda: run_task_batch("capture"), "interval", seconds=180)
+
+    scheduler.add_job(lambda: run_task_batch("crawler"), trigger="cron", hour=2, minute=0)
+    scheduler.add_job(lambda: run_task_batch("request"), trigger="cron", hour=2, minute=0)
+    scheduler.add_job(lambda: run_task_batch("capture"), trigger="cron", hour=2, minute=0)
+
     scheduler.start()
-    print("⏰ APScheduler started")
+    print("⏰ APScheduler agendado para executar diariamente às 02:00")
