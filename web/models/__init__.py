@@ -1,19 +1,11 @@
-import uuid
-from datetime import datetime, timezone
 from sqlalchemy import (
     Column, String, Text, DateTime, ForeignKey,
     Enum, Boolean, JSON
 )
 from sqlalchemy.dialects.mysql import CHAR
-from sqlalchemy.orm import declarative_base, relationship
-
+from sqlalchemy.orm import relationship
+from web.services.utils import generate_uuid, now_utc
 from web import db
-
-def generate_uuid():
-    return str(uuid.uuid4())
-
-def now_utc():
-    return datetime.now(timezone.utc)
 
 class Service(db.Model):
     __tablename__ = "services"

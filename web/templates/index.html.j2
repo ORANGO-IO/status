@@ -41,7 +41,7 @@
             <span id="{{ task.id }}-status" class="{{ task.last_status or 'unknown' }}"></span>
             <p>{{ task.name }}</p>
             <em id="{{ task.id }}-dateFormat">
-              {{ task.last_ran_at.astimezone('America/Sao_Paulo') if task.last_ran_at else 'Nunca executado' }}
+              {{ task.last_ran_at.astimezone(timezone) if task.last_ran_at else 'Nunca executado' }}
             </em>
             <a href="/details/{{ task.id }}">
               <p class="detail">Clique para mais detalhes</p>

@@ -1,7 +1,8 @@
 import typer
 import json
 import sys
-from datetime import datetime, timezone
+import secrets
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
 
@@ -10,7 +11,8 @@ sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 from web import create_app, db
 from web.services.scheduler import process_crawler, process_request, process_capture
-from web.models import Service, Task
+from web.models import Service, Task, Token
+from web.services.utils import now_utc
 
 app = typer.Typer()
 
@@ -138,6 +140,60 @@ def run_task(
         typer.echo(f"✅ Resultado salvo: {status.upper()}")
         typer.echo(f"📦 Saída: {output[:300]}")
 
+@app.command()
+def create_token():
+    """Cria um novo token de acesso vinculado a um serviço"""
+
+    flask_app = create_app()
+    with flask_app.app_context():
+        services = Service.query.order_by(Service.name).all()
+        if not services:
+            typer.echo("❌ Nenhum serviço disponível.")
+            raise typer.Exit()
+
+        typer.echo("📋 Serviços disponíveis:")
+        for idx, svc in enumerate(services, start=1):
+            typer.echo(f"{idx}. {svc.name} (slug: {svc.slug})")
+
+        selected_index = typer.prompt("Escolha o número do serviço", type=int)
+        if selected_index < 1 or selected_index > len(services):
+            typer.echo("❌ Número inválido.")
+            raise typer.Exit()
+
+        selected_service = services[selected_index - 1]
+
+        typer.echo("📦 Tipos de token:")
+        typer.echo("1. api      → Para APIs externas autenticadas")
+        typer.echo("2. webhook  → Para receber eventos externos")
+        typer.echo("3. cli      → Uso interno do Typer ou ferramentas")
+        typer.echo("4. master   → Acesso total (cuidado!)")
+
+        type_choice = typer.prompt("Escolha o tipo de token", type=int)
+        type_map = {1: "api", 2: "webhook", 3: "cli", 4: "master"}
+        token_type = type_map.get(type_choice)
+
+        if not token_type:
+            typer.echo("❌ Tipo inválido.")
+            raise typer.Exit()
+
+        # Gerar token seguro
+        raw_token = secrets.token_urlsafe(32)
+        now = now_utc()
+
+        token = Token(
+            token=raw_token,
+            type=token_type,
+            service_id=selected_service.id,
+            created_at=now,
+            expires_at=now + timedelta(days=365)
+        )
+        db.session.add(token)
+        db.session.commit()
+
+        typer.echo("✅ Token criado com sucesso!")
+        typer.echo(f"🔐 Token: {raw_token}")
+        typer.echo(f"🔗 Serviço: {selected_service.name}")
+        typer.echo(f"🔖 Tipo: {token_type}")
 
 if __name__ == "__main__":
     app()
