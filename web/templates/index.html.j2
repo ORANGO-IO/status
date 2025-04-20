@@ -1,0 +1,55 @@
+{% extends 'base.html.j2' %}
+
+{% block show_service %}
+  {% set count_online = tasks | selectattr("last_status", "equalto", "success") | list | length %}
+  {% set count_offline = tasks | rejectattr("last_status", "equalto", "success") | list | length %}
+
+  <h2 class="on">{{ count_online }} tarefas <strong>online</strong></h2>
+  <h2 class="off">{{ count_offline }} tarefas <strong>offline</strong></h2>
+{% endblock %}
+
+{% block content %}
+
+{# Agrupamento por nome do serviço #}
+{% set grouped = {} %}
+{% for task in tasks %}
+  {% set service_name = task.service.name %}
+  {% if service_name not in grouped %}
+    {% set _ = grouped.update({service_name: []}) %}
+  {% endif %}
+  {% set _ = grouped[service_name].append(task) %}
+{% endfor %}
+
+{# Itera pelos grupos de serviços #}
+{% for service_name, task_list in grouped.items() %}
+  <div class="service_group_header">
+    <h2>{{ service_name }}</h2>
+    <button type="button" class="button_test" id="{{ service_name | replace(' ', '_') }}">
+      <svg width="11" height="14" viewBox="0 0 11 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0 0V14L11 7L0 0Z" fill="#565656"/>
+      </svg>
+      Testar
+    </button>
+  </div>
+
+  <div class="services">
+    <h3>Tarefas</h3>
+    <ul id="{{ service_name | replace(' ', '_') }}-container">
+      {% for task in task_list %}
+        <li id="{{ task.id }}">
+          <div class="option">
+            <span id="{{ task.id }}-status" class="{{ task.last_status or 'unknown' }}"></span>
+            <p>{{ task.name }}</p>
+            <em id="{{ task.id }}-dateFormat">
+              {{ task.last_ran_at.astimezone('America/Sao_Paulo') if task.last_ran_at else 'Nunca executado' }}
+            </em>
+            <a href="/details/{{ task.id }}">
+              <p class="detail">Clique para mais detalhes</p>
+            </a>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endfor %}
+{% endblock %}

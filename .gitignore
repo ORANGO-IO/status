@@ -4,3 +4,4 @@ flaskapp/app/static/image_records/*.jpg
 *.css.map
 sqlite3.db
 geckodriver.log
+data/

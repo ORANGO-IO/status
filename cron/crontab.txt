@@ -1,3 +1,0 @@
-# m h dom mon dow user  command
-*/10 * * * * /script.sh >> /var/log/script.log
-    
