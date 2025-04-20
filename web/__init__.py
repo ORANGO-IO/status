@@ -24,4 +24,7 @@ def create_app():
     from web.routes import main_routes
     app.register_blueprint(main_routes)
 
+    from web.services.scheduler import start_scheduler
+    start_scheduler()
+
     return app
