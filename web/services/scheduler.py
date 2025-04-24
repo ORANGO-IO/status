@@ -76,12 +76,21 @@ def run_task_batch(task_type):
             process_capture(task)
 
 
-def start_scheduler():
-    scheduler = BackgroundScheduler()
+from apscheduler.schedulers.background import BackgroundScheduler
+from zoneinfo import ZoneInfo
 
-    scheduler.add_job(lambda: run_task_batch("crawler"), trigger="cron", hour=2, minute=0)
-    scheduler.add_job(lambda: run_task_batch("request"), trigger="cron", hour=2, minute=0)
-    scheduler.add_job(lambda: run_task_batch("capture"), trigger="cron", hour=2, minute=0)
+def start_scheduler(app):
+    scheduler = BackgroundScheduler(timezone=ZoneInfo("America/Sao_Paulo"))
+
+    def job_wrapper(task_type):
+        def job():
+            with app.app_context():
+                run_task_batch(task_type)
+        return job
+
+    scheduler.add_job(job_wrapper("crawler"), trigger="cron", hour=2, minute=0)
+    scheduler.add_job(job_wrapper("request"), trigger="cron", hour=2, minute=0)
+    scheduler.add_job(job_wrapper("capture"), trigger="cron", hour=2, minute=0)
 
     scheduler.start()
     print("⏰ APScheduler agendado para executar diariamente às 02:00")
