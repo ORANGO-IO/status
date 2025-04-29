@@ -10,7 +10,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 from web import create_app, db
-from web.services.scheduler import process_crawler, process_request, process_capture
+from web.services.scheduler import process_service_check, process_request, process_capture
 from web.models import Service, Task, Token
 from web.services.utils import now_utc
 
@@ -78,8 +78,7 @@ def create_task(
 
 @app.command()
 def run_task(
-    task_id: str = typer.Option(None, help="ID da task"),
-    task_name: str = typer.Option(None, help="(Alternativa) Nome exato da task")
+    task_id_or_name: str = typer.Argument(None, help="ID da task ou nome da task")
 ):
     """Executa uma task manualmente, atualiza status e salva resultado"""
 
@@ -87,11 +86,15 @@ def run_task(
     with flask_app.app_context():
         task = None
 
-        if task_id:
-            task = Task.query.filter_by(id=task_id).first()
-        elif task_name:
-            task = Task.query.filter_by(name=task_name).first()
-        else:
+        if task_id_or_name:
+            # Primeiro tenta como ID
+            task = Task.query.filter_by(id=task_id_or_name).first()
+
+            if not task:
+                # Se não encontrou por ID, tenta como nome
+                task = Task.query.filter_by(name=task_id_or_name).first()
+
+        if not task:
             # Lista interativa
             tasks = Task.query.order_by(Task.name).all()
             if not tasks:
@@ -114,8 +117,8 @@ def run_task(
 
         typer.echo(f"▶️ Executando task '{task.name}' do tipo '{task.type}'...")
 
-        if task.type == "crawler":
-            status, output = process_crawler(task, commit=False)
+        if task.type == "check":
+            status, output = process_service_check(task, commit=False)
         elif task.type == "request":
             status, output = process_request(task, commit=False)
         elif task.type == "capture":
@@ -139,7 +142,7 @@ def run_task(
         db.session.commit()
 
         typer.echo(f"✅ Resultado salvo: {status.upper()}")
-        typer.echo(f"📦 Saída: {output[:300]}")
+        typer.echo(f"📦 Saída: {str(output)[:300]}")
 
 @app.command()
 def create_token():

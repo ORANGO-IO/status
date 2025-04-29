@@ -1,18 +1,19 @@
 from playwright.sync_api import sync_playwright
 import re
 
-def format_playwright_error(error: Exception) -> dict:
+def format_playwright_error(error: Exception, action: str = None) -> dict:
     """
     Formata erros do Playwright para um dicionário JSON simples.
 
     Args:
         error (Exception): Exceção capturada durante execução Playwright.
+        action (str): Ação que estava sendo executada no momento do erro (opcional).
 
     Returns:
         dict: Estrutura compacta com erro e mensagem.
     """
     return {
-        "error": "playwright action failed",
+        "error": f"{action} failed" if action else "playwright action failed",
         "message": str(error).strip()
     }
 
@@ -106,5 +107,5 @@ def run_playwright_script(task_config: list) -> tuple:
         return "success", extracted_result or context
 
     except Exception as e:
-        print("❌ Erro fatal no Playwright:", e)
-        return "error", format_playwright_error(e)
+        print(f"❌ Erro durante '{action}':", e)
+        return "error", format_playwright_error(e, action=action)

@@ -1,65 +1,125 @@
-Dentro da pasta do projeto execute
+# 📈 Status Monitoring System
 
-```sh
-docker compose build --no-cache
-docker compose up -d
-# Rodando na porta 5005 por padrão, alterar em .env
-# use http://localhost:5005/service/lithocenter_frontend para testar o fluxo do frontend
-docker-compose logs -f
+Esse sistema contém um serviço web (Interface e API) e um por terminal (administrativo) para gerenciar o controle de verificação de serviços em execução.
+
+Sistema de **monitoramento de serviços** com:
+
+- **Interface web** para visualização de status
+- **API segura** para consulta e integração
+- **CLI** administrativa para criação de serviços, tasks e tokens
+- **Scheduler** automático para verificação diária dos serviços
+
+## 🚀 Instalação
+
+1. Clone o projeto:
+
+```bash
+git clone https://github.com/ORANGO-IO/status.git
+cd status
 ```
 
-## Rodar as migrations e seeds
-Entre no terminal do container do flaskapp e rode os seguintes comandos:
+2. Inicie o ambiente com Docker Compose:
 
-```sh
-docker exec -it status_flaskapp bash
-python -m flask db migrate
-python -m flask db seed
-```
-## Criando uma gravação de um job
-    Para criar uma gravação de um job, execute a rota api/job_record/<job_id> sendo o job_id o id de algum job
-    Ou entre na rota "/" e clique no botão testar de algum grupo de serviços
-
-## Rodando docker no windows
-```sh
-# Desligando os containers e removendo seus volumes
-docker-compose down --remove-orphans --volumes
-docker-compose -f docker-compose.windows.yml down --remove-orphans --volumes
-# Executando novamente os containers
-docker-compose -f docker-compose.windows.yml up --build
-# Se quiser dar um hard reset para garantir que nenhum cache ficou vc pode
-docker-compose -f docker-compose.windows.yml build --no-cache
-docker-compose -f docker-compose.windows.yml up
+```bash
+docker compose up -d --build
+docker compose logs -f
 ```
 
-## Rodando docker no linux
-```sh
-docker-compose down --remove-orphans --volumes
-docker-compose up --build
+Isso irá:
+
+- Subir o container web (Flask) com APScheduler configurado
+- Subir o banco de dados (MariaDB)
+- Rodar as migrações (se configuradas)
+
+## ⚙️ Banco de dados: Migrações (Flask-Migrate / Alembic)
+
+### Inicializar (apenas na primeira vez)
+
+```bash
+docker compose exec status flask db init
 ```
 
-### Como criar um job
-Para criar o job,precisa ter cadastrado um grupo de serviços e um serviço
+### Criar uma nova migration (após alterações nos models)
 
-- Para criar um grupo de serviços,use a rota /api/service_group passando o parametro name com o nome do grupo de serviço no seguinte formato:
-    {
-        "name":string
-    }
-- Para criar um serviço,precisa passar o id do grupo de serviços e o nome do serviço como parametro no seguinte formato:
-    {
-	    "name":string,
-	    "service_group_id":int
-    }
+```bash
+docker compose exec status flask db migrate -m "Descrição da alteração"
+```
 
-- Para criar um job,precisa passar os seguintes campos para o backend
-    {
-        "order":int,		     
-        "url":string,
-        "action":string,
-        "actionValue":string,
-        "serviceId":int,
-        "description":string
-    }
+### Aplicar migrations no banco
 
-o parametro action será o tipo de ação que ele executará
-o parametro actionValue servirá apenas quando o parametro action for XPATH,se não, pode ser vazio
+```bash
+docker compose exec status flask db upgrade
+```
+
+## 🛠️ CLI Administrativo (Typer)
+
+### Comandos disponíveis
+
+- Criar novo serviço:
+
+```bash
+docker compose exec -it status python cli/main.py create-service
+```
+
+- Criar nova task:
+
+```bash
+docker compose exec -it status python cli/main.py create-task
+```
+
+- Executar uma task manualmente:
+
+```bash
+docker compose exec -it status python cli/main.py run-task
+```
+
+- Criar um token de autenticação:
+
+```bash
+docker compose exec status python cli/main.py create-token
+```
+
+##  🧪 Rodando testes
+
+```bash
+docker compose exec -it status pytest -s
+```
+
+## 🌐 Acesso à Interface Web
+
+Após a inicialização:
+
+```
+http://localhost:5000
+```
+
+## 🔐 API Protegida
+
+Utilize o token de autenticação no header `Authorization: Bearer`.
+
+### Endpoints principais:
+
+- `GET /service/<service_id>/task` → Lista tasks
+- `GET /service/<service_id>/task/<task_id>` → Detalha uma task e seus resultados
+
+Exemplo de chamada usando `curl`:
+
+```bash
+curl -H "Authorization: Bearer SEU_TOKEN" http://localhost:5000/service/{service_id}/task
+```
+
+## ⏰ Scheduler
+
+- As tasks dos tipos `check`, `request` e `capture` são executadas automaticamente **todos os dias às 2h da manhã** (Timezone: America/Sao_Paulo).
+- Gerenciado com **APScheduler**.
+
+## 📋 Stack utilizada
+
+- Python 3.11
+- Flask 2.x
+- SQLAlchemy + Alembic (Flask-Migrate)
+- APScheduler
+- Typer (CLI)
+- Playwright (para interações web e capturas)
+- Docker + Docker Compose
+- MariaDB
