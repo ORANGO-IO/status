@@ -4,8 +4,8 @@
   {% set count_online = tasks | selectattr("last_status", "equalto", "success") | list | length %}
   {% set count_offline = tasks | rejectattr("last_status", "equalto", "success") | list | length %}
 
-  <h2 class="on">{{ count_online }} tarefas <strong>online</strong></h2>
-  <h2 class="off">{{ count_offline }} tarefas <strong>offline</strong></h2>
+  <h2 class="on">{{ count_online }} <strong>online</strong></h2>
+  <h2 class="off">{{ count_offline }} <strong>offline</strong></h2>
 {% endblock %}
 
 {% block content %}

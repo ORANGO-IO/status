@@ -1,0 +1,40 @@
+{% extends 'base.html.j2' %}
+
+{% block show_service %}
+<h2>{{ task.service.name }}</h2>
+<h3>{{ task.name }}</h3>
+{% endblock %}
+
+{% block content %}
+<div class="task-details">
+
+    <h3>Status atual:</h3>
+    <p>
+        {% if task.last_status == "success" %}
+        🟢 Online
+        {% else %}
+        🔴 Offline
+        {% endif %}
+    </p>
+
+    <h3>Última execução:</h3>
+    <p>
+        {{ task.last_ran_at.astimezone(timezone).strftime('%d/%m/%Y %H:%M') if task.last_ran_at else "Nunca executado"
+        }}
+    </p>
+
+    <h3>Últimos resultados (máx. 100):</h3>
+    {% if task.results %}
+    <div class="status-bar-container">
+        {% for bar in status_bars %}
+        <div class="status-bar {{ bar.color }}">
+            <span class="tooltip">{{ bar.timestamp.strftime('%d/%m/%Y %H:%M:%S') if bar.timestamp else 'Sem registro' }}</span>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>Nenhum resultado registrado ainda.</p>
+    {% endif %}
+
+</div>
+{% endblock %}

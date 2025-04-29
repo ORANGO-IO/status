@@ -1,6 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Kanit:wght@300&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Roboto:ital,wght@0,400;0,700;1,400&display=swap");
-
-@import "status";
+@import url("https://fonts.googleapis.com/css2?family=Kanit:wght@300&family=Roboto:ital,wght@0,400;0,700;1,400&display=swap");
 
 * {
   padding: 0;
@@ -14,7 +12,7 @@ body {
   height: 100%;
 }
 
-body>div {
+body > div {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -38,8 +36,7 @@ header {
     }
 
     h1 {
-      font-family: "Kanit";
-      font-style: normal;
+      font-family: "Kanit", sans-serif;
       font-size: 39px;
       color: #ffffff;
       margin-left: 16px;
@@ -61,12 +58,7 @@ main {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    font-family: Roboto;
-    font-style: normal;
-    font-weight: normal;
     font-size: 13px;
-    line-height: 15px;
-
     color: #a9a9a9;
 
     p {
@@ -85,11 +77,8 @@ main {
     flex: 1;
 
     h2 {
-      font-family: Roboto;
-      font-style: normal;
       font-weight: 700;
       font-size: 30px;
-      line-height: 35px;
       color: #565656;
     }
 
@@ -98,7 +87,6 @@ main {
       margin-left: 18px;
 
       h3 {
-        font-family: Roboto;
         font-size: 14px;
         margin-bottom: 8px;
       }
@@ -113,34 +101,11 @@ main {
           flex-direction: column;
           align-items: center;
 
-          .coupontooltip {
-            display: none;
-            margin-left: 28px;
-            padding: 10px;
-            position: absolute;
-            z-index: 1000;
-            width: 200px;
-            height: 100px;
-            object-fit: contain;
-          }
-
-          .option:hover .coupontooltip {
-            display: block;
-          }
-
-          >.option {
+          > .option {
             cursor: pointer;
             display: flex;
             margin-top: 8px;
             align-items: center;
-            display: flex;
-
-            button {
-              background: none;
-              outline: none;
-              border: none;
-              display: flex;
-            }
 
             p,
             em,
@@ -148,19 +113,7 @@ main {
               color: #7b7b7b;
             }
 
-            a,
-            .detail {
-              opacity: 0;
-              transition: opacity 0.5s linear;
-              font-family: Roboto;
-              font-size: 10px;
-              font-weight: bold;
-              margin-left: 16px;
-              text-decoration: none;
-            }
-
             p {
-              font-family: Roboto;
               margin-right: 12px;
               font-size: 14px;
             }
@@ -168,6 +121,19 @@ main {
             em {
               font-style: italic;
               font-size: 12px;
+            }
+
+            .detail {
+              opacity: 0;
+              transition: opacity 0.5s linear;
+              font-size: 10px;
+              font-weight: bold;
+              margin-left: 16px;
+              text-decoration: none;
+            }
+
+            &:hover .detail {
+              opacity: 1;
             }
 
             span {
@@ -179,46 +145,76 @@ main {
               align-items: center;
               justify-content: center;
 
-              &.online {
+              &.success {
                 background: linear-gradient(0deg, #3ba221, #3ba221), #3ba221;
-
-                ::before {
-                  position: absolute;
-                  background-color: linear-gradient(180deg,
-                      rgba(255, 255, 255, 0.12) 0%,
-                      rgba(255, 255, 255, 0) 53.95%),
-                    radial-gradient(65.29% 62.86% at 48.57% 48.57%,
-                      rgba(255, 255, 255, 0.19) 0%,
-                      rgba(255, 255, 255, 0) 100%);
-                }
               }
 
-              &.warning {
-                background: linear-gradient(0deg, #ff9900, #ff9900), #ff9900;
-              }
-
+              &.error,
               &.offline {
                 background: linear-gradient(0deg, #d22020, #d22020), #d22020;
-
-                ::before {
-                  position: absolute;
-                  background-color: linear-gradient(180deg,
-                      rgba(255, 255, 255, 0.12) 0%,
-                      rgba(255, 255, 255, 0) 53.95%),
-                    radial-gradient(65.29% 62.86% at 48.57% 48.57%,
-                      rgba(255, 255, 255, 0.19) 0%,
-                      rgba(255, 255, 255, 0) 100%);
-                }
               }
             }
+          }
+        }
+      }
+    }
 
-            &:hover {
+    .status-bar-container {
+      display: flex;
+      flex-wrap: nowrap;
+      margin: 0;
+      padding: 0;
+      margin-top: 0;
+      margin-left: 0;
 
-              a,
-              .detail {
-                opacity: 1;
-              }
-            }
+      .status-bar {
+        opacity: 0.8;
+        position: relative;
+        width: 8px;
+        height: 24px;
+        margin-right: 2px;
+        cursor: pointer;
+        margin: 0;
+        padding: 0;
+        margin-top: 0;
+        margin-left: 0;
+
+        &.gray {
+          background: #e3e3e3;
+        }
+
+        &.green {
+          background: #3ba221;
+        }
+
+        &.red {
+          background: #d22020;
+        }
+
+        .tooltip {
+          visibility: hidden;
+          background-color: #333;
+          color: #fff;
+          text-align: center;
+          border-radius: 4px;
+          padding: 4px 8px;
+          position: absolute;
+          z-index: 1;
+          bottom: 125%;
+          left: 50%;
+          transform: translateX(-50%);
+          white-space: nowrap;
+          font-size: 12px;
+          opacity: 0;
+          transition: opacity 0.2s;
+        }
+
+        &:hover {
+          opacity: 1;
+          
+          .tooltip {
+            visibility: visible;
+            opacity: 1;
           }
         }
       }
@@ -235,62 +231,37 @@ main {
     padding: 0 43px;
     margin-bottom: 64px;
 
-    >div {
-      display: flex;
-    }
-
     h2 {
       margin-right: 13px;
       font-size: 30px;
 
-      &.detail_title {
-        color: #646464;
-        font-weight: normal;
+      &.on {
+        color: #3ba221;
       }
 
-      &.secondary {
-        color: #a9a9a9;
-        font-weight: normal;
+      &.off {
+        color: #d22020;
       }
-    }
-
-    .on {
-      color: #3ba221;
-    }
-
-    .off {
-      color: #d22020;
     }
   }
 }
 
-.pagination-page-info {
-  padding: 0.6em;
-  padding-left: 0;
-  width: 40em;
-  margin: 0.5em;
-  margin-left: 0;
-  font-size: 12px;
+.services {
+  margin-bottom: 32px;
+
+  h3 {
+    font-weight: 400;
+  }
 }
 
-.pagination-page-info b {
-  color: black;
-  background: #6aa6ed;
-  padding-left: 2px;
-  padding: 0.1em 0.25em;
-  font-size: 150%;
-}
-
-.pagination {
+.service_group_header {
   display: flex;
+  column-gap: 16px;
+  align-items: center;
+}
 
-  li {
-    padding-left: 2px;
-    padding: 0.1em 0.25em;
-
-    a {
-      color: #646464;
-
-    }
+.loading {
+  li > .option span {
+    background: gray !important;
   }
 }
