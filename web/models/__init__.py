@@ -26,7 +26,8 @@ class Task(db.Model):
     id = Column(CHAR(36), primary_key=True, default=generate_uuid)
     service_id = Column(CHAR(36), ForeignKey("services.id"), nullable=False)
     name = Column(String(100), nullable=False)
-    type = Column(Enum("crawler", "request", "e2e", "capture", name="task_type"), nullable=False)
+    description = Column(Text, nullable=True)
+    type = Column(Enum("check", "request", "e2e", "capture", name="task_type"), nullable=False)
     config = Column(JSON, nullable=True)  # parâmetros específicos por tipo
     active = Column(Boolean, default=True)
     last_status = Column(String(32))  # sucesso, erro, timeout etc.
@@ -43,7 +44,7 @@ class TaskResult(db.Model):
     task_id = Column(CHAR(36), ForeignKey("tasks.id"), nullable=False)
 
     status = Column(String(32))  # ex: success, error, timeout, not_found
-    output = Column(Text, nullable=True)  # resultado principal: string, versão, link, erro, etc.
+    output = Column(JSON, nullable=True)
     timestamp = Column(DateTime, default=now_utc)
 
     task = relationship("Task", back_populates="results")

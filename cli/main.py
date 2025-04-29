@@ -35,7 +35,8 @@ def create_service(
 @app.command()
 def create_task(
     name: str = typer.Option(..., prompt="Nome da task"),
-    type: str = typer.Option(..., prompt="Tipo da task (crawler/request/capture/e2e)"),
+    description: str = typer.Option("", prompt="Descrição da task"),
+    type: str = typer.Option(..., prompt="Tipo da task (check/request/capture/e2e)"),
     config_json: str = typer.Option(..., prompt="JSON de configuração da task"),
 ):
     """Cria uma nova task vinculada a um serviço existente"""
@@ -66,7 +67,7 @@ def create_task(
             typer.echo(f"❌ JSON inválido: {e}")
             raise typer.Exit()
 
-        task = Task(name=name, type=type, config=config, service_id=selected_service.id)
+        task = Task(name=name, description=description, type=type, config=config, service_id=selected_service.id)
         db.session.add(task)
         db.session.commit()
 
