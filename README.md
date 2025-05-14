@@ -113,6 +113,65 @@ curl -H "Authorization: Bearer SEU_TOKEN" http://localhost:5000/service/{service
 - As tasks dos tipos `check`, `request` e `capture` são executadas automaticamente **todos os dias às 2h da manhã** (Timezone: America/Sao_Paulo).
 - Gerenciado com **APScheduler**.
 
+### Exemplos de configuração
+
+Para configuração de tasks precisamos de json line ao executar `create-task`
+
+#### Configuração de task tipo `check`, `e2e` e `capture`
+
+Essa tabela detalha os campos necessários para configurar uma task do tipo `check`, `e2e` ou `capture`. Cada campo deve ser preenchido corretamente para garantir o funcionamento esperado.
+
+| Campo                          | Descrição                                                                                                                                           |
+|--------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| `action`                       | Tipo de ação: `goto`, `wait_for_selector`, `extract_text`, `click`, `find_and_click_link`, `find_and_extract_download_link`, `capture_current_url`. |
+| `url`                          | URL a ser acessada (obrigatório apenas para `action: "goto"`).                                                                                      |
+| `selector`                     | Seletor CSS do elemento (necessário para `wait_for_selector`, `extract_text`, `click`).                                                             |
+| `regex`                        | Expressão regular para tratar o texto extraído (opcional em `extract_text`).                                                                        |
+| `store_as`                     | Chave de contexto onde será armazenado o valor extraído (opcional em `extract_text`, `find_and_extract_download_link`, `capture_current_url`).      |
+| `aria_label_contains_variable` | Nome da variável no contexto cujo valor deve estar contido no atributo `aria-label` do link (obrigatório em `find_and_click_link`).                  |
+| `text_contains`                | Texto que deve estar presente no link ou botão a ser clicado ou extraído (necessário em `find_and_click_link` e `find_and_extract_download_link`).   |
+
+#### Ações suportadas (`action`)
+
+| `action`                          | Descrição                                                                                                      |
+|----------------------------------|----------------------------------------------------------------------------------------------------------------|
+| `goto`                           | Acessa uma URL definida no campo `url`.                                                                       |
+| `wait_for_selector`              | Aguarda até que um seletor CSS esteja presente na página.                                                     |
+| `extract_text`                   | Extrai o texto de um elemento definido por `selector`. Pode aplicar `regex` e armazenar com `store_as`.       |
+| `click`                          | Clica em um elemento identificado pelo seletor CSS.                                                            |
+| `find_and_click_link`            | Procura por um link (`<a>`) que contenha um texto específico e um `aria-label` com variável armazenada.        |
+| `find_and_extract_download_link` | Clica em um botão que inicia um download e captura a URL do arquivo baixado. Pode armazenar com `store_as`.   |
+| `capture_current_url`            | Armazena a URL atual da página no contexto, se definido `store_as`, ou retorna como resultado principal.      |
+
+
+
+#### Configuração de task tipo `request`
+
+Essa tabela detalha os campos necessários para configurar uma task do tipo `request`. Cada campo deve ser preenchido corretamente para garantir o funcionamento esperado. 
+
+| Campo                  | Descrição                                                                                     |
+|------------------------|-----------------------------------------------------------------------------------------------|
+| `method`               | Método HTTP a ser utilizado na requisição (ex.: `GET`, `POST`, etc.).                         |
+| `url`                  | URL do serviço a ser requisitado.                                                            |
+| `headers`              | Cabeçalhos HTTP adicionais para a requisição (formato JSON).                                 |
+| `expected_values`      | Valores esperados na resposta da requisição, definidos como um objeto JSON. Com suporte a expressões JSONPath (ex.: `._links.self[].href`).                 |
+
+Exemplo:
+
+```json
+{
+  "method": "GET",
+  "url": "https://litho.com.br/wp/wp-json",
+  "headers": {},
+  "expected_values": {
+    "name": "Lithocenter HospitalDia - WORDPRESS",
+    "url": "https://litho.com.br/wp",
+    "namespaces": ["wp/v2"],
+    "routes./._links.self[].href": "https://litho.com.br/wp/wp-json/"
+  }
+}
+```
+
 ## 📋 Stack utilizada
 
 - Python 3.11

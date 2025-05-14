@@ -1,12 +1,12 @@
 from pydantic import BaseModel
-from typing import Optional, Any, List, Dict
+from typing import Optional, Any, List, Union
 from datetime import datetime
 
 
 class TaskResultSchema(BaseModel):
     id: str
     status: str
-    output: Optional[str]
+    output: Union[str, dict, Any]  # <--- Aqui está a correção
     timestamp: datetime
 
     class Config:
