@@ -10,11 +10,40 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 from web import create_app, db
-from web.services.scheduler import process_service_check, process_request, process_capture
-from web.models import Service, Task, Token
+from web.services.scheduler import (
+    process_service_check,
+    process_request,
+    process_capture,
+)
+from web.models import Service, Task, Token, TaskResult
 from web.services.utils import now_utc
 
 app = typer.Typer()
+
+
+def _execute_and_save(task):
+    """Executa uma task, atualiza status e salva o resultado."""
+    typer.echo(f"▶️ Executando task '{task.name}' do tipo '{task.type}'...")
+    if task.type == "check":
+        status, output = process_service_check(task, commit=False)
+    elif task.type == "request":
+        status, output = process_request(task, commit=False)
+    elif task.type == "capture":
+        status, output = process_capture(task, commit=False)
+    else:
+        typer.echo(f"❌ Tipo de task '{task.type}' não suportado.")
+        return
+
+    now = datetime.now(timezone.utc)
+    task.last_status = status
+    task.last_ran_at = now
+
+    result = TaskResult(task_id=task.id, status=status, output=output, timestamp=now)
+    db.session.add(result)
+    db.session.commit()
+
+    typer.echo(f"✅ Resultado salvo: {status.upper()}")
+    typer.echo(f"📦 Saída: {str(output)[:300]}")
 
 
 @app.command()
@@ -67,7 +96,13 @@ def create_task(
             typer.echo(f"❌ JSON inválido: {e}")
             raise typer.Exit()
 
-        task = Task(name=name, description=description, type=type, config=config, service_id=selected_service.id)
+        task = Task(
+            name=name,
+            description=description,
+            type=type,
+            config=config,
+            service_id=selected_service.id,
+        )
         db.session.add(task)
         db.session.commit()
 
@@ -78,34 +113,29 @@ def create_task(
 
 @app.command()
 def run_task(
-    task_id_or_name: str = typer.Argument(None, help="ID da task ou nome da task")
+    task_id_or_name: str = typer.Argument(None, help="ID da task ou nome da task"),
 ):
-    """Executa uma task manualmente, atualiza status e salva resultado"""
-
+    """Executa uma task manualmente"""
     flask_app = create_app()
     with flask_app.app_context():
+        # Seleção da task
         task = None
-
         if task_id_or_name:
-            # Primeiro tenta como ID
-            task = Task.query.filter_by(id=task_id_or_name).first()
-
-            if not task:
-                # Se não encontrou por ID, tenta como nome
-                task = Task.query.filter_by(name=task_id_or_name).first()
-
+            task = (
+                Task.query.filter_by(id=task_id_or_name).first()
+                or Task.query.filter_by(name=task_id_or_name).first()
+            )
         if not task:
-            # Lista interativa
             tasks = Task.query.order_by(Task.name).all()
             if not tasks:
                 typer.echo("❌ Nenhuma task encontrada.")
                 raise typer.Exit()
-
             typer.echo("📋 Tasks disponíveis:")
             for idx, t in enumerate(tasks, start=1):
                 typer.echo(f"{idx}. {t.name} ({t.type}) — Serviço: {t.service.name}")
-
-            selected_index = typer.prompt("Digite o número da task para executar", type=int)
+            selected_index = typer.prompt(
+                "Digite o número da task para executar", type=int
+            )
             if selected_index < 1 or selected_index > len(tasks):
                 typer.echo("❌ Índice inválido.")
                 raise typer.Exit()
@@ -115,34 +145,8 @@ def run_task(
             typer.echo("❌ Task não encontrada.")
             raise typer.Exit()
 
-        typer.echo(f"▶️ Executando task '{task.name}' do tipo '{task.type}'...")
+        _execute_and_save(task)
 
-        if task.type == "check":
-            status, output = process_service_check(task, commit=False)
-        elif task.type == "request":
-            status, output = process_request(task, commit=False)
-        elif task.type == "capture":
-            status, output = process_capture(task, commit=False)
-        else:
-            typer.echo(f"❌ Tipo de task '{task.type}' não suportado.")
-            raise typer.Exit()
-
-        now = datetime.now(timezone.utc)
-        task.last_status = status
-        task.last_ran_at = now
-
-        from web.models import TaskResult
-        result = TaskResult(
-            task_id=task.id,
-            status=status,
-            output=output,
-            timestamp=now
-        )
-        db.session.add(result)
-        db.session.commit()
-
-        typer.echo(f"✅ Resultado salvo: {status.upper()}")
-        typer.echo(f"📦 Saída: {str(output)[:300]}")
 
 @app.command()
 def create_token():
@@ -189,7 +193,7 @@ def create_token():
             type=token_type,
             service_id=selected_service.id,
             created_at=now,
-            expires_at=now + timedelta(days=365)
+            expires_at=now + timedelta(days=365),
         )
         db.session.add(token)
         db.session.commit()
@@ -198,6 +202,55 @@ def create_token():
         typer.echo(f"🔐 Token: {raw_token}")
         typer.echo(f"🔗 Serviço: {selected_service.name}")
         typer.echo(f"🔖 Tipo: {token_type}")
+
+
+# Função para executar todas as tasks de um serviço manualmente
+@app.command()
+def run_service(
+    service_id_or_slug: str = typer.Argument(None, help="ID ou slug do serviço"),
+):
+    """Executa todas as tasks de um serviço manualmente"""
+
+    flask_app = create_app()
+    with flask_app.app_context():
+        # Seleção do serviço
+        service = (
+            Service.query.filter(
+                (Service.id == service_id_or_slug)
+                | (Service.slug == service_id_or_slug)
+            ).first()
+            if service_id_or_slug
+            else None
+        )
+        if not service:
+            services = Service.query.order_by(Service.name).all()
+            if not services:
+                typer.echo("❌ Nenhum serviço encontrado.")
+                raise typer.Exit()
+            typer.echo("📋 Serviços disponíveis:")
+            for idx, svc in enumerate(services, start=1):
+                typer.echo(f"{idx}. {svc.name} (slug: {svc.slug})")
+            selected_index = typer.prompt(
+                "Digite o número do serviço para executar", type=int
+            )
+            if selected_index < 1 or selected_index > len(services):
+                typer.echo("❌ Índice inválido.")
+                raise typer.Exit()
+            service = services[selected_index - 1]
+
+        typer.echo(f"▶️ Executando todas as tasks do serviço '{service.name}'...")
+        tasks = (
+            Task.query.filter_by(service_id=service.id, active=True)
+            .order_by(Task.name)
+            .all()
+        )
+        if not tasks:
+            typer.echo("⚠️ Nenhuma task ativa encontrada para este serviço.")
+            raise typer.Exit()
+
+        for task in tasks:
+            _execute_and_save(task)
+
 
 if __name__ == "__main__":
     app()
