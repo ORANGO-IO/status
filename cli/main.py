@@ -15,7 +15,7 @@ from web.services.scheduler import (
     process_request,
     process_capture,
 )
-from web.models import Service, Task, Token, TaskResult
+from web.models import Service, Task, TaskResult
 from web.services.utils import now_utc
 
 app = typer.Typer()

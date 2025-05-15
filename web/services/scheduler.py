@@ -7,6 +7,22 @@ from web.services.run_playwright_script import run_playwright_script
 from zoneinfo import ZoneInfo
 
 
+def deep_search_match(data, expected):
+    if not expected:
+        return True
+
+    def match(d, k, v):
+        if isinstance(d, dict):
+            if k in d and d[k] == v:
+                return True
+            return any(match(val, k, v) for val in d.values())
+        elif isinstance(d, list):
+            return any(match(item, k, v) for item in d)
+        return False
+
+    return all(match(data, k, v) for k, v in expected.items())
+
+
 def process_service_check(task, commit=True):
     status, output = run_playwright_script(task.config)
 
@@ -26,11 +42,20 @@ def process_request(task, commit=True):
             headers=task.config.get("headers", {}),
             json=task.config.get("body", {}),
         )
-        status = "success" if response.ok else "error"
-        output = f"Response: {response.status_code}"
+        try:
+            if response.headers.get("Content-Type", "").startswith("application/json"):
+                output = response.json()
+                expected = task.config.get("expected_values", {})
+                status = "success" if response.ok and deep_search_match(output, expected) else "error"
+            else:
+                output = response.text
+                status = "success" if response.ok else "error"
+        except Exception:
+            output = response.text
+            status = "error"
     except Exception as e:
         status = "error"
-        output = str(e)
+        output = {"error": str(e)}
 
     if commit:
         save_task_result(task, status, output)

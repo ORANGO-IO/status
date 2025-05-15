@@ -17,7 +17,7 @@ class Service(db.Model):
     created_at = Column(DateTime, default=now_utc)
 
     tasks = relationship("Task", back_populates="service", cascade="all, delete-orphan")
-    tokens = relationship("Token", back_populates="service", cascade="all, delete-orphan")
+    credentials = relationship("Credential", back_populates="service", cascade="all, delete-orphan")
 
 
 class Task(db.Model):
@@ -50,14 +50,17 @@ class TaskResult(db.Model):
     task = relationship("Task", back_populates="results")
 
 
-class Token(db.Model):
-    __tablename__ = "tokens"
+class Credential(db.Model):
+    __tablename__ = "credentials"
 
     id = Column(CHAR(36), primary_key=True, default=generate_uuid)
-    service_id = Column(CHAR(36), ForeignKey("services.id"), nullable=False)
-    token = Column(String(128), unique=True, nullable=False)
-    type = Column(Enum("webhook", "api", "cli", "master", name="token_type"), nullable=False)
+    role = Column(Enum("token", "password", name="credential_role"),
+                  nullable=False)
+    system = Column(Enum("webhook","api","cli","master","external", name="credential_system"),
+                    nullable=True)
+    service_id = Column(CHAR(36), ForeignKey("services.id"), nullable=True)
+    secret = Column(String(128), nullable=False, unique=True) 
     created_at = Column(DateTime, default=now_utc)
     expires_at = Column(DateTime, nullable=True)
 
-    service = relationship("Service", back_populates="tokens")
+    service = relationship("Service", back_populates="credentials")
