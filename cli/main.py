@@ -150,25 +150,24 @@ def run_task(
 
 @app.command()
 def create_token():
-    """Cria um novo token de acesso vinculado a um serviço"""
+    """Cria um novo token de acesso vinculado a um serviço (ou global para todos os serviços)"""
 
     flask_app = create_app()
     with flask_app.app_context():
         services = Service.query.order_by(Service.name).all()
-        if not services:
-            typer.echo("❌ Nenhum serviço disponível.")
-            raise typer.Exit()
-
         typer.echo("📋 Serviços disponíveis:")
         for idx, svc in enumerate(services, start=1):
             typer.echo(f"{idx}. {svc.name} (slug: {svc.slug})")
+        typer.echo("0. (Acesso global a todos os serviços)")
 
-        selected_index = typer.prompt("Escolha o número do serviço", type=int)
-        if selected_index < 1 or selected_index > len(services):
+        selected_index = typer.prompt("Escolha o número do serviço ou 0", type=int)
+        if selected_index == 0:
+            selected_service_id = None
+        elif selected_index < 0 or selected_index > len(services):
             typer.echo("❌ Número inválido.")
             raise typer.Exit()
-
-        selected_service = services[selected_index - 1]
+        else:
+            selected_service_id = services[selected_index - 1].id
 
         typer.echo("📦 Tipos de token:")
         typer.echo("1. api      → Para APIs externas autenticadas")
@@ -178,9 +177,9 @@ def create_token():
 
         type_choice = typer.prompt("Escolha o tipo de token", type=int)
         type_map = {1: "api", 2: "webhook", 3: "cli", 4: "master"}
-        token_type = type_map.get(type_choice)
+        token_system = type_map.get(type_choice)
 
-        if not token_type:
+        if not token_system:
             typer.echo("❌ Tipo inválido.")
             raise typer.Exit()
 
@@ -188,21 +187,89 @@ def create_token():
         raw_token = secrets.token_urlsafe(32)
         now = now_utc()
 
-        token = Token(
-            token=raw_token,
-            type=token_type,
-            service_id=selected_service.id,
+        from web.models import Credential
+
+        credential = Credential(
+            secret=raw_token,
+            role="token",
+            system=token_system,
+            service_id=selected_service_id,
             created_at=now,
             expires_at=now + timedelta(days=365),
         )
-        db.session.add(token)
+        db.session.add(credential)
         db.session.commit()
 
         typer.echo("✅ Token criado com sucesso!")
         typer.echo(f"🔐 Token: {raw_token}")
-        typer.echo(f"🔗 Serviço: {selected_service.name}")
-        typer.echo(f"🔖 Tipo: {token_type}")
+        if selected_service_id:
+            typer.echo(f"🔗 Serviço: {services[selected_index-1].name}")
+        else:
+            typer.echo("🌐 Token com acesso GLOBAL (todos os serviços)")
+        typer.echo(f"🔖 Tipo: {token_system}")
 
+from cryptography.fernet import Fernet
+
+def get_fernet():
+    from web.config import Config  # ou de onde está seu SECRET_KEY
+    return Fernet(Config.SECRET_KEY.encode() if isinstance(Config.SECRET_KEY, str) else Config.SECRET_KEY)
+
+def encrypt_password(password: str) -> str:
+    f = get_fernet()
+    return f.encrypt(password.encode()).decode()
+
+def decrypt_password(token: str) -> str:
+    f = get_fernet()
+    return f.decrypt(token.encode()).decode()
+
+@app.command()
+def create_password():
+    """Cria um novo credential com role=password (senha criptografada)"""
+
+    flask_app = create_app()
+    with flask_app.app_context():
+        services = Service.query.order_by(Service.name).all()
+        typer.echo("📋 Serviços disponíveis:")
+        for idx, svc in enumerate(services, start=1):
+            typer.echo(f"{idx}. {svc.name} (slug: {svc.slug})")
+        typer.echo("0. (Não vincular a serviço)")
+
+        selected_index = typer.prompt("Escolha o número do serviço ou 0", type=int)
+        if selected_index == 0:
+            selected_service_id = None
+        elif selected_index < 0 or selected_index > len(services):
+            typer.echo("❌ Número inválido.")
+            raise typer.Exit()
+        else:
+            selected_service_id = services[selected_index - 1].id
+
+        # Perguntar se quer gerar senha forte ou digitar uma
+        choice = typer.prompt("Deseja gerar uma senha forte automaticamente? [s/N]", default="N")
+        if choice.lower() == "s":
+            import secrets, string
+            alphabet = string.ascii_letters + string.digits + string.punctuation
+            password = ''.join(secrets.choice(alphabet) for _ in range(12))
+            typer.echo(f"🔑 Senha gerada: {password}")
+        else:
+            password = typer.prompt("Digite a senha", hide_input=True, confirmation_prompt=True)
+
+        encrypted = encrypt_password(password)
+        now = now_utc()
+
+        from web.models import Credential
+        credential = Credential(
+            secret=encrypted,
+            role="password",
+            system="external",  # Ou outro valor, dependendo do seu enum
+            service_id=selected_service_id,
+            created_at=now,
+            expires_at=now + timedelta(days=365),
+        )
+        db.session.add(credential)
+        db.session.commit()
+        typer.echo("✅ Credential do tipo password criado com sucesso!")
+        typer.echo(f"🔑 Senha original: {password}")
+        typer.echo(f"🗝️  Senha criptografada (banco): {encrypted}")
 
 # Função para executar todas as tasks de um serviço manualmente
 @app.command()

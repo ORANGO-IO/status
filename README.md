@@ -70,13 +70,25 @@ docker compose exec -it status python cli/main.py create-task
 - Executar uma task manualmente:
 
 ```bash
-docker compose exec -it status python cli/main.py run-task
+docker compose exec -it status python cli/main.py run-task {task_id}
+```
+
+- Executar todos as tasks de um serviço manualmente:
+
+```bash
+docker compose exec -it status python cli/main.py run-service
 ```
 
 - Criar um token de autenticação:
 
 ```bash
 docker compose exec status python cli/main.py create-token
+```
+
+- Criar ou cadastrar uma senha com criptografia:
+
+```bash
+docker compose exec status python cli/main.py create-password
 ```
 
 ##  🧪 Rodando testes

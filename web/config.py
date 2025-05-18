@@ -10,3 +10,4 @@ class Config:
     TIMEZONE = os.getenv("TIMEZONE")
     TEMPLATE_FOLDER = "./templates"
     STATIC_FOLDER = "./static"
+    SECRET_KEY = os.getenv("SECRET_KEY")

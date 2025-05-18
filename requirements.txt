@@ -10,3 +10,4 @@ typer
 APScheduler==3.11.0
 pytest==8.3.5
 pydantic
+cryptography
