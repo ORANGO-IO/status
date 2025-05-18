@@ -15,6 +15,7 @@ from web.services.scheduler import (
     process_request,
     process_capture,
 )
+from web.services.crypto_utils import encrypt_password
 from web.models import Service, Task, TaskResult
 from web.services.utils import now_utc
 
@@ -203,24 +204,11 @@ def create_token():
         typer.echo("✅ Token criado com sucesso!")
         typer.echo(f"🔐 Token: {raw_token}")
         if selected_service_id:
-            typer.echo(f"🔗 Serviço: {services[selected_index-1].name}")
+            typer.echo(f"🔗 Serviço: {services[selected_index - 1].name}")
         else:
             typer.echo("🌐 Token com acesso GLOBAL (todos os serviços)")
         typer.echo(f"🔖 Tipo: {token_system}")
 
-from cryptography.fernet import Fernet
-
-def get_fernet():
-    from web.config import Config  # ou de onde está seu SECRET_KEY
-    return Fernet(Config.SECRET_KEY.encode() if isinstance(Config.SECRET_KEY, str) else Config.SECRET_KEY)
-
-def encrypt_password(password: str) -> str:
-    f = get_fernet()
-    return f.encrypt(password.encode()).decode()
-
-def decrypt_password(token: str) -> str:
-    f = get_fernet()
-    return f.decrypt(token.encode()).decode()
 
 @app.command()
 def create_password():
@@ -244,19 +232,25 @@ def create_password():
             selected_service_id = services[selected_index - 1].id
 
         # Perguntar se quer gerar senha forte ou digitar uma
-        choice = typer.prompt("Deseja gerar uma senha forte automaticamente? [s/N]", default="N")
+        choice = typer.prompt(
+            "Deseja gerar uma senha forte automaticamente? [s/N]", default="N"
+        )
         if choice.lower() == "s":
             import secrets, string
+
             alphabet = string.ascii_letters + string.digits + string.punctuation
-            password = ''.join(secrets.choice(alphabet) for _ in range(12))
+            password = "".join(secrets.choice(alphabet) for _ in range(12))
             typer.echo(f"🔑 Senha gerada: {password}")
         else:
-            password = typer.prompt("Digite a senha", hide_input=True, confirmation_prompt=True)
+            password = typer.prompt(
+                "Digite a senha", hide_input=True, confirmation_prompt=True
+            )
 
         encrypted = encrypt_password(password)
         now = now_utc()
 
         from web.models import Credential
+
         credential = Credential(
             secret=encrypted,
             role="password",
@@ -268,8 +262,10 @@ def create_password():
         db.session.add(credential)
         db.session.commit()
         typer.echo("✅ Credential do tipo password criado com sucesso!")
+        typer.echo("🔗 UUID: " + str(credential.uuid))
         typer.echo(f"🔑 Senha original: {password}")
         typer.echo(f"🗝️  Senha criptografada (banco): {encrypted}")
+
 
 # Função para executar todas as tasks de um serviço manualmente
 @app.command()

@@ -40,6 +40,24 @@ def run_playwright_script(task_config: list) -> tuple:
                     elif action == "wait_for_selector":
                         print(f"⏳ Aguardando seletor: {step['selector']}")
                         page.wait_for_selector(step["selector"], timeout=10000)
+                    
+                    elif action == "fill":
+                        selector = step["selector"]
+                        value = step["value"]
+                        if step.get("is_password"):
+                            # Busca a senha no banco usando o UUID passado em "credential_id"
+                            from web.models import Credential  # ou ajuste para seu import correto
+                            from web import db
+                            cred_id = step.get("credential_id")
+                            if not cred_id:
+                                raise ValueError("credential_id não informado para campo de senha")
+                            cred = db.session.query(Credential).filter_by(id=cred_id, role="password").first()
+                            if not cred:
+                                raise ValueError(f"Senha não encontrada para credential_id={cred_id}")
+                            from web.services.crypto_utils import decrypt_password  # ajuste o import conforme seu projeto
+                            value = decrypt_password(cred.secret)
+                        print(f"⌨️ Preenchendo {selector} com valor {'*' * len(value) if step.get('is_password') else value}")
+                        page.fill(selector, value)
 
                     elif action == "extract_text":
                         text = page.inner_text(step["selector"])
