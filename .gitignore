@@ -1,5 +1,5 @@
 __pycache__
-flaskapp/app/static/image_records/*.jpg
+web/static/img/screenshots/*.jpg
 *.css
 *.css.map
 sqlite3.db

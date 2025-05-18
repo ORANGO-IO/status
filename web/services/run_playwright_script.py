@@ -1,4 +1,5 @@
 from playwright.sync_api import sync_playwright
+from web.services.convert_and_compress_image import convert_and_compress_image
 import re
 
 def format_playwright_error(error: Exception, action: str = None) -> dict:
@@ -72,6 +73,18 @@ def run_playwright_script(task_config: list) -> tuple:
                             context[step["store_as"]] = text
                         else:
                             extracted_result = text
+
+                    elif action == "screenshot":
+                        filename = step.get("path", "screenshot.jpg")
+                        if not filename.endswith(".jpg"):
+                            filename = filename.rsplit(".", 1)[0] + ".jpg"
+
+                        full_page = step.get("full_page", True)
+                        full_path = f"web/static/img/screenshots/{filename}"
+
+                        print(f"📸 Tirando screenshot em {filename} (full_page={full_page})")
+                        page.screenshot(path=full_path, full_page=full_page)
+                        convert_and_compress_image(full_path)
 
                     elif action == "click":
                         print(f"🖱️ Clicando em: {step['selector']}")
