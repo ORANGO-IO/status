@@ -262,7 +262,7 @@ def create_password():
         db.session.add(credential)
         db.session.commit()
         typer.echo("✅ Credential do tipo password criado com sucesso!")
-        typer.echo("🔗 UUID: " + str(credential.uuid))
+        typer.echo("🔗 UUID: " + str(credential.id))
         typer.echo(f"🔑 Senha original: {password}")
         typer.echo(f"🗝️  Senha criptografada (banco): {encrypted}")
 

@@ -36,6 +36,22 @@ def run_playwright_script(task_config: list) -> tuple:
                 try:
                     if action == "goto":
                         print(f"🌐 Acessando URL: {step['url']}")
+                        context_options = {}
+
+                        if "auth_credential_id" in step:
+                            from web.models import Credential
+                            from web import db
+                            from web.services.crypto_utils import decrypt_password
+
+                            cred = db.session.query(Credential).filter_by(id=step["auth_credential_id"], role="password").first()
+                            if not cred:
+                                raise ValueError(f"Credencial de autenticação não encontrada: {step['auth_credential_id']}")
+                            decrypted = decrypt_password(cred.secret)
+                            username, password = decrypted.split(":", 1)
+                            context_options["http_credentials"] = {"username": username, "password": password}
+
+                        ctx = browser.new_context(**context_options)
+                        page = ctx.new_page()
                         page.goto(step["url"], timeout=30000)
 
                     elif action == "wait_for_selector":
