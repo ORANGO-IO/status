@@ -32,7 +32,7 @@ def test_extrair_link_esus():
         },
         {
             "action": "wait_for_selector",
-            "selector": "button:has-text(\"Versão para Linux\")"
+            "selector": "button:has-text(\"para Linux\")"
         },
         {
             "action": "capture_current_url",
@@ -40,7 +40,7 @@ def test_extrair_link_esus():
         },
         {
             "action": "find_and_extract_download_link",
-            "text_contains": "Versão para Linux",
+            "text_contains": ["Versão para Linux", "Download para Linux"],
             "store_as": "link_linux"
         }
     ]
