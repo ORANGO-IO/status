@@ -119,11 +119,19 @@ def run_playwright_script(task_config: list) -> tuple:
                                 break
 
                     elif action == "find_and_extract_download_link":
-                        print("🔍 Buscando botão com texto:", step["text_contains"])
+                        text_field = step.get("text_contains")
+                        if isinstance(text_field, str):
+                            text_options = [text_field]
+                        elif isinstance(text_field, list):
+                            text_options = text_field
+                        else:
+                            raise ValueError("text_contains must be a string or list of strings")
+
+                        print("🔍 Buscando botão com texto:", text_options)
                         buttons = page.query_selector_all("button")
                         for btn in buttons:
                             inner = btn.inner_text()
-                            if step["text_contains"] in inner:
+                            if any(option in inner for option in text_options):
                                 with page.expect_download() as download_info:
                                     btn.click()
                                 download = download_info.value
